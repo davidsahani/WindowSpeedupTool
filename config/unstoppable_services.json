@@ -1,0 +1,74 @@
+{
+    "LanmanServer": [
+        "automatic",
+        "Server"
+    ],
+    "EventSystem": [
+        "automatic",
+        "COM+ Event System"
+    ],
+    "DPS": [
+        "automatic",
+        "Diagnostic Policy Service"
+    ],
+    "TrkWks": [
+        "automatic",
+        "Distributed Link Tracking Client"
+    ],
+    "FontCache": [
+        "automatic",
+        "Windows Font Cache Service"
+    ],
+    "BITS": [
+        "automatic-delayed",
+        "Background Intelligent Transfer Service"
+    ],
+    "CDPSvc": [
+        "automatic-delayed",
+        "Connected Devices Platform Service"
+    ],
+    "BthAvctpSvc": [
+        "manual",
+        "AVCTP service"
+    ],
+    "NcbService": [
+        "manual",
+        "Network Connection Broker"
+    ],
+    "StorSvc": [
+        "manual",
+        "Storage Service"
+    ],
+    "SstpSvc": [
+        "manual",
+        "Secure Socket Tunneling Protocol Service"
+    ],
+    "wlidsvc": [
+        "manual",
+        "Microsoft Account Sign-in Assistant"
+    ],
+    "WdiServiceHost": [
+        "manual",
+        "Diagnostic Service Host"
+    ],
+    "WdiSystemHost": [
+        "manual",
+        "Diagnostic System Host"
+    ],
+    "PcaSvc": [
+        "manual",
+        "Program Compatibility Assistant Service"
+    ],
+    "SSDPSRV": [
+        "manual",
+        "SSDP Discovery"
+    ],
+    "TokenBroker": [
+        "manual",
+        "Web Account Manager"
+    ],
+    "WerSvc": [
+        "manual",
+        "Windows Error Reporting Service"
+    ]
+}

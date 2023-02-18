@@ -1,0 +1,30 @@
+{
+    "iphlpsvc": [
+        "2",
+        "IP Helper"
+    ],
+    "Dnscache": [
+        "2",
+        "DNS Client"
+    ],
+    "NlaSvc": [
+        "2",
+        "Network Location Awareness"
+    ],
+    "Wcmsvc": [
+        "2",
+        "Windows Connection Manager"
+    ],
+    "EventLog": [
+        "2",
+        "Windows Event Log"
+    ],
+    "netprofm": [
+        "3",
+        "Network List Service"
+    ],
+    "Netman": [
+        "3",
+        "Network Connections"
+    ]
+}

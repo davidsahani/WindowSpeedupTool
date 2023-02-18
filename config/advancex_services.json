@@ -1,0 +1,38 @@
+{
+    "Schedule": [
+        "2",
+        "Task Scheduler"
+    ],
+    "gpsvc": [
+        "2",
+        "Group policy client"
+    ],
+    "SystemEventsBroker": [
+        "2",
+        "System Events Broker"
+    ],
+    "DoSvc": [
+        "3",
+        "Delivery Optimization"
+    ],
+    "AppXSvc": [
+        "3",
+        "AppX Deployment Service (AppXSVC)"
+    ],
+    "ClipSVC": [
+        "3",
+        "Client License Service (ClipSVC)"
+    ],
+    "NgcSvc": [
+        "3",
+        "Microsoft Passport"
+    ],
+    "NgcCtnrSvc": [
+        "3",
+        "Microsoft Passport Container"
+    ],
+    "WinHttpAutoProxySvc": [
+        "3",
+        "WinHTTP Web Proxy Auto-Discovery Service"
+    ]
+}

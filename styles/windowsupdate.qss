@@ -1,0 +1,39 @@
+QPushButton {
+    border-radius: 5px;
+    padding: 6px;
+    color: Cyan;
+    font-size: 8pt;
+    font-weight: bold;
+    min-width: 80px;
+}
+QPushButton:hover {
+    color: #ffffff;
+    background-color: Teal;
+}
+QPushButton:pressed {
+    background-color: Turquoise;
+}
+QPushButton:disabled {
+    color: SteelBlue;
+}
+
+#UpdateLabel {
+    color: DodgerBlue;
+    font-size: 15pt;
+    font-weight: bold;
+    font-family: serif;
+}
+
+#UpdateIcon {
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    background-color: Dark;
+    image: url('./icons/windows-update.png');
+}
+
+#StatusLabel {
+    color: #1eabff;
+    font-weight: bold;
+}

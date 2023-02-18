@@ -1,0 +1,63 @@
+{
+	"Data usage and sharing": [
+		"DusmSvc",
+		"DsSvc"
+	],
+	"Windows camera Frame server": [
+		"FrameServer"
+	],
+	"Windows Mobile Hotspot Service": [
+		"icssvc"
+	],
+	"Windows Search": [
+		"WSearch"
+	],
+	"Geolocation Service": [
+		"lfsvc"
+	],
+	"Secondary Logon": [
+		"seclogon"
+	],
+	"Blutooth services": [
+		"bthserv",
+		"BTAGService"
+	],
+	"printer services": [
+		"Spooler",
+		"PrintNotify"
+	],
+	"Phone Service": [
+		"PhoneSvc"
+	],
+	"Radio Management Service": [
+		"RmSvc"
+	],
+	"Remote Desktop Services": [
+		"TermService",
+		"SessionEnv",
+		"UmRdpService"
+	],
+	"Hyper-V services": [
+		"HvHost",
+		"vmickvpexchange",
+		"vmicguestinterface",
+		"vmicshutdown",
+		"vmicheartbeat",
+		"vmicvmsession",
+		"vmicrdv",
+		"vmictimesync",
+		"vmicvss"
+	],
+	"Xbox services": [
+		"XboxGipSvc",
+		"XblAuthManager",
+		"XblGameSave",
+		"XboxNetApiSvc"
+	],
+	"Windows Biometric Service": [
+		"WbioSrvc"
+	],
+	"Touch Keyboard and Handwriting Panel": [
+		"TabletInputService"
+	]
+}

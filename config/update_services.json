@@ -1,0 +1,18 @@
+{
+    "UsoSvc": [
+        "automatic-delayed",
+        "2"
+    ],
+    "wuauserv": [
+        "automatic-delayed",
+        "2"
+    ],
+    "dosvc": [
+        "automatic-delayed",
+        "2"
+    ],
+    "WaaSMedicSvc": [
+        "manual",
+        "3"
+    ]
+}

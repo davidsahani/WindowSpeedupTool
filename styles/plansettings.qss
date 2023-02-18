@@ -1,0 +1,58 @@
+#TopLabel {
+    color: DodgerBlue;
+    font-size: 10pt;
+    font-weight: bold;
+    font-family: serif;
+    min-width: 60px
+}
+
+#DisplayIcon {
+    image: url('./icons/night-mode.png');
+}
+#SleepIcon {
+    image: url('./icons/half-moon.png');
+}
+#DisplayIcon:hover {
+    background-color: #455364;
+}
+#DisplayIcon:pressed {
+    background-color: #455364;
+}
+#SleepIcon:hover {
+    background-color: #455364;
+}
+#SleepIcon:pressed {
+    background-color: #455364;
+}
+
+QPushButton {
+    border-radius: 5px;
+    padding: 6px;
+    color: Cyan;
+    font-size: 8pt;
+    font-weight: bold;
+    max-width: 200px;
+}
+QPushButton:hover {
+    color: #ffffff;
+    background-color: Teal;
+}
+QPushButton:pressed {
+    background-color: Turquoise;
+}
+QPushButton:disabled {
+    color: SteelBlue;
+}
+
+QLineEdit {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 9pt;
+}
+
+QTabWidget::pane {
+    top: -1px; 
+} 
+QTabBar::tab {
+    min-width: 30px;
+}

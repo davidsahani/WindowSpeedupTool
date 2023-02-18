@@ -1,0 +1,37 @@
+QPushButton {
+    border-radius: 5px;
+    padding: 6px;
+    color: Cyan;
+    font-size: 8pt;
+    font-weight: bold;
+}
+QPushButton:hover {
+    color: #ffffff;
+    background-color: Teal;
+}
+QPushButton:pressed {
+    background-color: Turquoise;
+}
+QPushButton:disabled {
+    color: SteelBlue;
+}
+
+#ActionWidget QWidget {
+    background-color: #4e5863;
+    padding: 5.5px;
+}
+
+#ActionWidget QLabel {
+    color: Snow;
+    border-radius: 5px;
+    font-weight: bold; 
+}
+
+#ActionWidget QPushButton {
+    color: #00E7FF;
+    font-weight: bold;
+}
+#ActionWidget QPushButton:hover {
+    color: #ffffff;
+    background-color: Teal;
+}

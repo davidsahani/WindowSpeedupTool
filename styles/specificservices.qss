@@ -1,0 +1,28 @@
+#TopLabel {
+    background-color: DarkSlateGray;
+    color: Turquoise;
+    font-size: 10pt;
+    font-weight: bold;
+    font-family: serif;
+    border-radius: 5px;
+    padding: 12px;
+}
+
+QPushButton {
+    border-radius: 5px;
+    padding: 6px;
+    color: Cyan;
+    font-size: 8pt;
+    font-weight: bold;
+    max-width: 100px;
+}
+QPushButton:hover {
+    color: #ffffff;
+    background-color: Teal;
+}
+QPushButton:pressed {
+    background-color: Turquoise;
+}
+QPushButton:disabled {
+    color: SteelBlue;
+}

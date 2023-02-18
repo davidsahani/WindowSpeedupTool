@@ -1,0 +1,34 @@
+{
+    "BFE": [
+        "2",
+        "Base Filtering Engine"
+    ],
+    "sppsvc": [
+        "2",
+        "Software Protection"
+    ],
+    "wscsvc": [
+        "2",
+        "Security Center"
+    ],
+    "SamSs": [
+        "2",
+        "Security Accounts Manager"
+    ],
+    "SgrmBroker": [
+        "2",
+        "System Guard Runtime Monitor Broker"
+    ],
+    "mpssvc": [
+        "2",
+        "Windows Defender Firewall"
+    ],
+    "WinDefend": [
+        "2",
+        "Windows Defender Antivirus Service"
+    ],
+    "SecurityHealthService": [
+        "3",
+        "Windows Security Service"
+    ]
+}
