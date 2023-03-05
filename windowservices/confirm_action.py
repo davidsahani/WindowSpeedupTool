@@ -4,9 +4,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (QHeaderView, QStackedWidget, QTableView,
                              QVBoxLayout, QWidget)
 
-from src.overlay import MessageOverlay
-from src.table import CheckableHeaderView, Model
 from utils import service
+from widgets.overlay import MessageOverlay
+from widgets.table import CheckableHeaderView, Model
 
 
 class ServicesView(QTableView):
@@ -53,7 +53,7 @@ class ServicesView(QTableView):
         """yield the selected items from model"""
         for index, state in enumerate(self.header.check_states):
             if not state:
-                continue   # for unselected items
+                continue  # unselected items
             yield self.services_list[index]
 
 

@@ -148,6 +148,4 @@ class PowerThrottling(QFrame):
         """Check if filepath is valid windows path"""
         pattern1 = r'^[a-zA-Z]:/(?:[^//:*?"<>|\r\n]+/)*[^//:*?"<>|\r\n]*$'
         pattern2 = r'^[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*$'
-        if re.match(pattern1, filepath):
-            return True
-        return re.match(pattern2, filepath) is not None
+        return bool(re.match(pattern1, filepath) or re.match(pattern2, filepath))

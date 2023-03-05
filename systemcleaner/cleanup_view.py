@@ -4,7 +4,7 @@ from PyQt6.QtGui import QTextCursor
 from PyQt6.QtWidgets import (QFrame, QPlainTextEdit, QPushButton,
                              QStackedWidget, QVBoxLayout, QWidget)
 
-from src.overlay import Message
+from widgets.overlay import Message
 
 
 class BorderWidget(Message):

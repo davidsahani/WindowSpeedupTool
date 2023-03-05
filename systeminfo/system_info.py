@@ -1,6 +1,7 @@
 from typing import OrderedDict
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import QEvent, QPoint, Qt
+from PyQt6.QtGui import QFontMetrics, QPainter
 from PyQt6.QtWidgets import (QApplication, QFrame, QGridLayout, QGroupBox,
                              QLabel, QPushButton, QScrollArea, QSizePolicy,
                              QVBoxLayout, QWidget)
@@ -8,6 +9,22 @@ from PyQt6.QtWidgets import (QApplication, QFrame, QGridLayout, QGroupBox,
 import styles
 
 from . import sysinfo
+
+
+class LineSpacingLabel(QLabel):
+    def paintEvent(self, a0: QEvent) -> None:
+        painter = QPainter(self)
+        metrics = QFontMetrics(self.font())
+        line_height = metrics.height() * 1.5  # adjust the line spacing here
+        y = 0
+        for line in self.text().splitlines():
+            painter.drawText(QPoint(0, int(y) + metrics.ascent()), line)
+            y += line_height
+        painter.end()
+
+        # Adjust widget size respect to line spacing
+        height = y + metrics.descent() - 6.5
+        self.setFixedHeight(int(height))
 
 
 class SystemInfo(QFrame):
@@ -34,10 +51,10 @@ class SystemInfo(QFrame):
     def makeWidget(self) -> QWidget:
         """Make main widget for systeminfo"""
         processor = self.makeGroupWidget(sysinfo.processor())
-        gpus = self.makeGroupWidget_(sysinfo.gpus())
-        rams = self.makeGroupWidget_(sysinfo.rams())
-        disks = self.makeGroupWidget_(sysinfo.disks())
-        net_adapters = self.makeGroupWidget_(sysinfo.net_adapters())
+        gpus = self.makeGroupWidget(sysinfo.gpus())
+        rams = self.makeGroupWidget(sysinfo.rams())
+        disks = self.makeGroupWidget(sysinfo.disks())
+        net_adapters = self.makeGroupWidget(sysinfo.net_adapters())
         motherboard = self.makeGroupWidget(sysinfo.motherboard())
         os = self.makeGroupWidget(sysinfo.os_info())  # type: ignore
 
@@ -62,67 +79,37 @@ class SystemInfo(QFrame):
         widget.setLayout(layout)
         return widget
 
-    def makeGroupWidget(self, values: list[tuple[str, str | int]]) -> QGroupBox:
+    def makeGroupWidget(self, values: list[tuple[str, str | int]] |
+                        OrderedDict[str, list[tuple[str, str]]]) -> QGroupBox:
         """Make group widget for values"""
-        layout = QGridLayout()
-        copy_button = QPushButton()
-        copy_button.setToolTip("copy")
-        copy_button.setObjectName("CopyButton")
-        copy_button.clicked.connect(  # type: ignore
-            lambda: self.copyValuesToClipboard(values))
-        layout.addWidget(copy_button, 0, 1, Qt.AlignmentFlag.AlignRight)
-
-        for row, (name, value) in enumerate(values):
-            label = QLabel(f"{name}: {value}")
-            layout.addWidget(label, row, 0)
-
-        gbox = QGroupBox()
-        gbox.setLayout(layout)
-        return gbox
-
-    def makeGroupWidget_(self, values: OrderedDict[str, list[tuple[str, str]]]) -> QGroupBox:
-        """Make group widget for keys-values"""
-        if len(values) == 1:
-            return self.makeGroupWidget(
-                list(values.values())[0]  # type: ignore
-            )
-        layout = QGridLayout()
-        copy_button = QPushButton()
-        copy_button.setToolTip("copy")
-        copy_button.setObjectName("CopyButton")
-        copy_button.clicked.connect(  # type: ignore
-            lambda: self.copyKeysValuesToClipboard(values))
-        layout.addWidget(copy_button, 0, 1, Qt.AlignmentFlag.AlignRight)
-
-        row = 0
-        for key, _values in values.items():
-            layout.addWidget(QLabel(f"{key}"), row, 0)
-            row += 1
-            for name, value in _values:
-                layout.addWidget(QLabel(f"\t{name}: {value}"), row, 0)
-                row += 1
-
-        gbox = QGroupBox()
-        gbox.setLayout(layout)
-        return gbox
-
-    def copyValuesToClipboard(self, values: list[tuple[str, str | int]]) -> None:
-        """Copy values to clipboard."""
-        text = '\n'.join((f"{name}: {value}" for name, value in values))
-        clipboard = QApplication.clipboard()
-        clipboard.setText(text)
-
-    def copyKeysValuesToClipboard(self, values: OrderedDict[str, list[tuple[str, str]]]) -> None:
-        """Copy key-values to the clipboard."""
-        if len(values) == 1:
+        if isinstance(values, list):
+            text = '\n'.join((f"{name}: {value}" for name, value in values))
+        elif len(values) == 1:
             text = '\n'.join(
-                (f"{name}: {value}" for name, value in values.values()))
+                (f"{name}: {value}" for name, value in list(values.values())[0]))
         else:
-            text = ""
-            for key, _values in values.items():
-                text += f"{key}\n"
-                for name, value in _values:
-                    text += f"\t{name}: {value}\n"
+            text = ''
+            for _values in values.values():
+                text += '\n'.join((f"{name}: {value}" for name,
+                                  value in _values))
+                text += '\n\n'
+            text = text.rstrip('\n')
+        label = LineSpacingLabel(text)
 
-        clipboard = QApplication.clipboard()
-        clipboard.setText(text)
+        copy_button = QPushButton()
+        copy_button.setToolTip("copy")
+        copy_button.setObjectName("CopyButton")
+        copy_button.clicked.connect(  # type: ignore
+            lambda: self.copyTextToClipboard(text))
+
+        layout = QGridLayout()
+        layout.addWidget(label, 0, 0)
+        layout.addWidget(copy_button, 0, 1, Qt.AlignmentFlag.AlignTop
+                         | Qt.AlignmentFlag.AlignRight)
+        gbox = QGroupBox()
+        gbox.setLayout(layout)
+        return gbox
+
+    def copyTextToClipboard(self, text: str) -> None:
+        """Copy text to clipboard."""
+        QApplication.clipboard().setText(text)

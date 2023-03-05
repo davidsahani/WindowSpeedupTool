@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QProgressBar,
                              QPushButton, QSizePolicy, QStackedWidget,
                              QVBoxLayout, QWidget)
 
-from src.overlay import MessageOverlay
+from widgets.overlay import MessageOverlay
 
 
 class ActionWidget(QWidget):

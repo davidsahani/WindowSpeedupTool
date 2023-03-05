@@ -98,7 +98,7 @@ class ProcessTerminal(QDockWidget):
         """Kill the process on close button press"""
         self.process.kill()
         self.clearText()
-        return super().closeEvent(event)
+        super().closeEvent(event)
 
     def connectFinish(self, function: Callable[[int], None]) -> None:
         """Connect the function to process thread finish event.

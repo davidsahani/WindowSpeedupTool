@@ -16,6 +16,13 @@ from .error_view import ErrorView
 from .loading_widget import LoadingWidget
 
 
+def backup_dir() -> str:
+    path = os.path.join(os.environ.get('USERPROFILE') or '', 'documents')
+    if not os.path.exists(path):
+        path = os.getcwd()
+    return os.path.join(path, 'drivers-backup')
+
+
 class DriversBackup(QFrame):
     signal = pyqtSignal(int)
     signal1 = pyqtSignal(int, int)
@@ -23,11 +30,11 @@ class DriversBackup(QFrame):
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
         self._parent = parent
-        self._backup_dir = os.path.join(os.getcwd(), 'drivers-backup')
+        self.__backup_thread = None
+        self.__uninstall_thread = None
+        self._backup_dir = backup_dir()
         self.setupWidgets()
         self.setStyleSheet(styles.get("drivers"))
-        self.__backup_thread: Thread | None = None
-        self.__uninstall_thread: Thread | None = None
 
     def setupWidgets(self) -> None:
         """Setup the widgets in layout"""
@@ -97,7 +104,7 @@ class DriversBackup(QFrame):
             lambda: self.onBackupFinish(drivers)
         )
         self.progressbar.setRange(0, len(drivers))
-        self.progressbar.setFormat("backing up drivers: %v/%m (%p%)")
+        self.progressbar.setFormat("Backing up drivers: %v/%m (%p%)")
         self.border_widget.showProgressBar()  # show on progress start
         self.signal.connect(self.updateProgressbar)
 

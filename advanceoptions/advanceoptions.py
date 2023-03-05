@@ -1,22 +1,15 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (QCommandLinkButton, QFrame, QGridLayout,
-                             QGroupBox, QProgressBar, QPushButton, QSizePolicy,
+                             QProgressBar, QPushButton, QSizePolicy,
                              QSpacerItem, QStackedWidget, QVBoxLayout, QWidget)
 
 import styles
-from src.overlay import MessageOverlay
 from utils import config, power, service
+from widgets.overlay import MessageOverlay
 from windowservices.base_service import Action, BaseService
+from windowservices.windows_services import AdvanceServices
 
 from .packages_uninstall import PackagesUninstall
-
-
-def filter_services(services: dict[str, str]) -> dict[str, str]:
-    "Filter services from running services."
-
-    running_services = [service_name for service_name, *_ in service.running()]
-    return {service_name: startup_type for service_name, startup_type
-            in services.items() if service_name in running_services}
 
 
 class Services(BaseService):
@@ -53,136 +46,6 @@ class Services(BaseService):
         msg = "These service changes require restart, Restart Now?"
         self.message_overlay.displayPrompt(msg)
         self.message_overlay.connect(power.restart)
-
-
-class AdvanceServices(BaseService):
-    def setupWidgets(self) -> None:
-        super().setupWidgets()
-        self.disable_running_button = QPushButton(
-            "Disable Running Services")
-        self.enable_unstoppable_services = QPushButton(
-            "Enable unstoppable Services")
-        self.disable_unstoppable_services = QPushButton(
-            "Disable unstoppable Services")
-        self.terminate_unstoppable_services = QPushButton(
-            "Terminate unstoppable services")
-        self.start_necessary_services = QPushButton(
-            "Start Necessary Services")
-        self.grid.addWidget(self.disable_running_button, 2, 0)
-        self.grid.addWidget(self.enable_unstoppable_services, 2, 1)
-        self.grid.addWidget(self.disable_unstoppable_services, 3, 0)
-        self.grid.addWidget(self.terminate_unstoppable_services, 3, 1)
-        self.grid.addWidget(self.start_necessary_services, 4, 0, 4, 2)
-
-    def connectSlots(self) -> None:
-        super().connectSlots()
-        self.disable_running_button.clicked.connect(  # type: ignore
-            self.openDisableRunningServices)
-        self.enable_unstoppable_services.clicked.connect(  # type: ignore
-            self.openEnableUnstoppableServices)
-        self.disable_unstoppable_services.clicked.connect(  # type: ignore
-            self.openDisableUnstoppableServices)
-        self.terminate_unstoppable_services.clicked.connect(  # type: ignore
-            self.openTerminateUnstoppableServices)
-        self.start_necessary_services.clicked.connect(  # type: ignore
-            self.openStartNecessaryServices)
-
-    def openDisableRunningServices(self) -> None:
-        """Open confirm prompt widget to disable running services"""
-        services = config.load(self.config_name)
-        services = filter_services(services)
-        if services:
-            self.fireAction(Action.DISABLE, services)
-            return
-        self.message_overlay.displayMessage("No services running to disable")
-
-    def openEnableUnstoppableServices(self) -> None:
-        """Open confirm prompt widget to enable unstoppable services"""
-        services = config.load(config.UNSTOPPABLE_SERVICES)
-        self.fireAction(Action.ENABLE, services)
-
-    def openDisableUnstoppableServices(self) -> None:
-        """Open confirm prompt widget to disable unstoppable services"""
-        services = config.load(config.UNSTOPPABLE_SERVICES)
-        self.fireAction(Action.DISABLE, services)
-
-    def openStartNecessaryServices(self) -> None:
-        """Open confirm prompt widget to start necessary services"""
-        services = config.load(config.NECESSARY_SERVICES)
-        self.fireAction(Action.START, services)
-
-    def openTerminateUnstoppableServices(self) -> None:
-        """Open confirm prompt widget to kill unstoppable services"""
-        services = config.load(config.UNSTOPPABLE_SERVICES)
-        widget = self.openConfirmationWidget(services)
-        widget.displayPrompt("Do you want to terminate these services?")
-        widget.setConfirmText("Terminate")
-        widget.connect(self.terminateUnstoppableServices)
-
-    def terminateUnstoppableServices(self, services: dict[str, str]) -> None:
-        """kill unstoppable services"""
-        for service_name in services:
-            service.kill(service_name)
-
-
-class ExtraServices(QGroupBox):
-    def __init__(self, parent: QWidget, config_name: str, message_overlay: MessageOverlay) -> None:
-        super().__init__(parent)
-        self.config_name = config_name
-        self.message_overlay = message_overlay
-        self.setupWidgets()
-
-    def setupWidgets(self) -> None:
-        """Make the widgets and setup the layout"""
-        layout = QGridLayout()
-
-        for row, (service_name, _) in enumerate(config.load(self.config_name)):
-            display_name = service.display_name(service_name)
-            enable_button = QPushButton(f"Enable {display_name}")
-            disable_button = QPushButton(f"Disable {display_name}")
-
-            enable_button.clicked.connect(  # type: ignore
-                lambda _, x=service_name: self.enableService(x))  # type: ignore
-            disable_button.clicked.connect(  # type: ignore
-                lambda _, x=service_name: self.disableService(x))  # type: ignore
-
-            layout.addWidget(enable_button, row, 0)
-            layout.addWidget(disable_button, row, 1)
-
-        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.setLayout(layout)
-
-    def enableService(self, service_name: str) -> None:
-        """Enable the windows service"""
-        services_config = config.load(self.config_name)
-        startup_type = services_config[service_name]
-
-        is_warning: bool = False
-        if service.info(service_name)['start_type'] != 'disabled':
-            message = f"{service_name!r} is already enabled"
-        elif not service.set_startup_type(service_name, startup_type):
-            message = f"successively enabled: {service_name}"
-        else:
-            is_warning = True
-            message = f"Failed to enable: {service.display_name(service_name)}"
-
-        self.message_overlay.displayMessage(message, is_warning)
-
-    def disableService(self, service_name: str) -> None:
-        """Disable the windows service"""
-        # backup the service' current config before disabling
-        config.backup([service_name], self.config_name)
-
-        is_warning: bool = False
-        if service.info(service_name)['start_type'] == 'disabled':
-            message = f"{service_name!r} is already disabled"
-        elif not service.set_startup_type(service_name, 'disabled'):
-            message = f"successively disabled: {service_name}"
-        else:
-            is_warning = True
-            message = f"Failed to disable: {service.display_name(service_name)}"
-
-        self.message_overlay.displayMessage(message, is_warning)
 
 
 class WindowsDefender(BaseService):

@@ -3,8 +3,8 @@ from PyQt6.QtWidgets import (QFrame, QMessageBox, QStackedWidget, QVBoxLayout,
                              QWidget)
 
 import styles
-from src.process_terminal import ProcessTerminal
-from src.sizegrip import SizeGrip
+from widgets.process_terminal import ProcessTerminal
+from widgets.sizegrip import SizeGrip
 
 from .loading_widget import LoadingWidget
 from .packages_view import PackagesView
@@ -74,7 +74,7 @@ class PackagesUninstall(QFrame):
             lambda s: self.onUninstallFinish(s, row))
 
     def onUninstallFinish(self, status: int, row: int) -> None:
-        """Remove the selected row and disconnect the signal"""
+        """Remove the selected row"""
         if status:
             return  # on failure
         self.packages_view.model().removeRow(row)

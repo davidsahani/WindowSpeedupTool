@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import (QFrame, QGridLayout, QGroupBox, QProgressBar,
                              QStackedWidget, QVBoxLayout, QWidget)
 
 import styles
-from src.overlay import MessageOverlay
 from utils import config, power, service
+from widgets.overlay import MessageOverlay
 
 from .base_service import Action, BaseService
 from .normal_specific_services import NormalSpecificServices
@@ -94,7 +94,7 @@ class HiddenServices(BaseService):
         self.message_overlay.connect(power.restart)
 
 
-class AdvancedServices(BaseService):
+class AdvanceServices(BaseService):
     def setupWidgets(self) -> None:
         super().setupWidgets()
         self.disable_running_button = QPushButton(
@@ -240,12 +240,12 @@ class WindowServices(QFrame):
         """Setup the widgets in layout"""
         self.message_overlay = MessageOverlay(self)
         self.progressbar = QProgressBar(self)
-        self.progressbar.setVisible(False)  # hide initially
+        self.progressbar.hide()  # hide initially
 
-        advanced_services = AdvancedServices(
+        advanced_services = AdvanceServices(
             self, self._parent, config.ADVANCE_SERVICES,
             self.message_overlay, self.progressbar)
-        advanced_services.setTitle("Advanced Services")
+        advanced_services.setTitle("Advance Services")
         advanced_services.setSizePolicy(
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 

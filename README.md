@@ -6,7 +6,7 @@ This tool focuses on stripping down windows services, components to point where 
 
 > Python version: `3.11`
 
-# <img src="./doc-images/screenshot.png" style="height: 560px; width:788px;"/>
+# <img src="./docs/screenshot.png" style="height: 560px; width:788px;"/>
 
 > Currently supported os: `windows 10`
 

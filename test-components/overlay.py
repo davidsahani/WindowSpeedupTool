@@ -11,7 +11,7 @@ parent_dir: str = os.path.abspath(os.path.join(
 sys.path.append(parent_dir)
 
 # prevent automatic pep8 import organization
-from src.overlay import MessageOverlay  # nopep8
+from widgets.overlay import MessageOverlay  # nopep8
 
 
 class MainWindow(QWidget):

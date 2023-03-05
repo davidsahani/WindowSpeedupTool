@@ -6,8 +6,8 @@ from PyQt6.QtWidgets import (QFrame, QGridLayout, QLabel, QPushButton,
                              QSizePolicy, QSpacerItem, QStackedWidget, QWidget)
 
 import styles
-from src.overlay import MessageOverlay
 from utils import config, service
+from widgets.overlay import MessageOverlay
 
 
 class ServicesList(QWidget):

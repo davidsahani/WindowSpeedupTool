@@ -9,8 +9,8 @@ from PyQt6.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QFrame,
                              QVBoxLayout, QWidget)
 
 import styles
-from src.overlay import MessageOverlay
 from utils import power
+from widgets.overlay import MessageOverlay
 
 
 class InputButton(QWidget):
@@ -411,10 +411,10 @@ class PlanSettings(QFrame):
             return 1    # as failed
         scheme_name = scheme_name.strip()  # remove whitespaces
         if status := power.change_name(self.scheme_guid, scheme_name):
-            msg = f"Failed to change name to {scheme_name!r}, status code: {status}"
+            msg = f"Failed to change scheme name to {scheme_name!r}, status code: {status}"
             self.message_overlay.displayMessage(msg, True)
             return status
-        msg = f"changed name {self.scheme_name!r} -> {scheme_name!r}"
+        msg = f"Changed scheme name {self.scheme_name!r} -> {scheme_name!r}"
         self.message_overlay.displayMessage(msg)
         self.top_label.setText(f"Change settings for the plan: {scheme_name}")
         self.scheme_name = scheme_name
@@ -427,7 +427,7 @@ class PlanSettings(QFrame):
             self.message_overlay.displayMessage(msg, True)
             return 1  # as failed
         _, guid = power.duplicate_scheme(self.scheme_guid, destination_guid)
-        msg = f"duplicated {self.scheme_name!r} -> guid: {guid}"
+        msg = f"Duplicated {self.scheme_name!r} -> guid: {guid}"
         self.message_overlay.displayMessage(msg)
         return 0  # as success
 
@@ -443,7 +443,7 @@ class PlanSettings(QFrame):
             msg = f"Failed to export scheme: {self.scheme_name!r}, status code: {status}"
             self.message_overlay.displayMessage(msg, True)
             return
-        msg = f"exported scheme: {self.scheme_name!r}"
+        msg = f"Successively exported scheme: {self.scheme_name!r}"
         self.message_overlay.displayMessage(msg)
 
     def deleteScheme(self) -> None:
@@ -459,5 +459,5 @@ class PlanSettings(QFrame):
             return
         if not (status := power.delete_scheme(self.scheme_guid)):
             self.switchToMaster()   # on success
-        msg = f"Failed to delete scheme: {self.scheme_name!r} with status code: {status}"
+        msg = f"Failed to delete scheme: {self.scheme_name!r}, status code: {status}"
         self.message_overlay.displayMessage(msg, True)

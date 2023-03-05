@@ -4,9 +4,9 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (QGridLayout, QGroupBox, QProgressBar, QPushButton,
                              QStackedWidget, QWidget)
 
-from src.overlay import MessageOverlay
-from src.process_terminal import Thread
 from utils import config, service
+from widgets.overlay import MessageOverlay
+from widgets.process_terminal import Thread
 
 from .confirm_action import ConfirmServiceAction, ErrorWindow
 

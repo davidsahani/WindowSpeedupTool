@@ -4,13 +4,13 @@ from typing import Sequence
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QWidget
 
-from src.overlay import MessageOverlay
-from src.process_terminal import Thread
 from utils import power, service
+from widgets.overlay import MessageOverlay
+from widgets.process_terminal import Thread
 
 from .update import (WINDOWS_SERVICES_CONFIG, backup_config,
                      is_automatic_drivers_updates_enabled,
-                     is_automatic_updates_enabled, is_updates_active,
+                     is_automatic_updates_enabled, is_services_running,
                      load_config, set_automatic_drivers_updates,
                      set_automatic_updates)
 from .update_gui import UpdateGui
@@ -49,7 +49,7 @@ class WindowsUpdate(QFrame):
 
     def setStates(self) -> None:
         """Set widget's current state texts and checks"""
-        if is_updates_active(self.service_names):
+        if is_services_running(self.service_names):
             self.gui.status_label.setText("Status: Active")
             self.gui.toggle_update_button.setText("Deactivate")
         else:

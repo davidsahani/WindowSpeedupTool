@@ -186,10 +186,11 @@ def reset_powerthrottling(program: str) -> int:
 # **************************************************************************
 
 
-def launch_advanced_settings() -> int:
+def launch_advanced_settings() -> None:
     "Launch Advanced power settings"
 
-    return os.system("control powercfg.cpl,,1")
+    cmd = "control powercfg.cpl,,1"
+    subprocess.Popen(cmd, startupinfo=PROCESS_STARTUP_INFO)
 
 
 def get_display_timeout(scheme_guid: str) -> tuple[int, int]:

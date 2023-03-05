@@ -31,7 +31,7 @@ def load_drives_from_file() -> Generator[list[str], None, None]:
         yield [v.strip() for v in values]
 
 
-class DriversManagerTest(DriversBackup):
+class TestWidget(DriversBackup):
     def uninstallDriver(self, row: int) -> None:
         """Overwritten:
             can't have drivers accidentally
@@ -48,7 +48,7 @@ def main() -> None:
         qt_api='pyqt6'))
 
     stacked_Widget = QStackedWidget()
-    widget = DriversManagerTest(stacked_Widget)
+    widget = TestWidget(stacked_Widget)
     stacked_Widget.addWidget(widget)
     stacked_Widget.setWindowTitle("Drivers Manager")
     stacked_Widget.resize(750, 550)

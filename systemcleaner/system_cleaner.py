@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (QCheckBox, QFrame, QGridLayout, QPushButton,
                              QVBoxLayout, QWidget)
 
 import styles
-from src.process_terminal import Thread
+from widgets.process_terminal import Thread
 
 from .clean import clean_eventlogs, clean_junkfiles, clean_windows_updates
 from .cleanup_view import CleanupView

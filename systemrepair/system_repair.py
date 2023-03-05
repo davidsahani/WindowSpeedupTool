@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import (QComboBox, QFrame, QGridLayout, QGroupBox,
                              QVBoxLayout, QWidget)
 
 import styles
-from src.process_terminal import ProcessTerminal
-from src.sizegrip import SizeGrip
+from widgets.process_terminal import ProcessTerminal
+from widgets.sizegrip import SizeGrip
 
 SYSTEM_REPAIR_COMMANDS = [
     (

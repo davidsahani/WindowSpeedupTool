@@ -6,7 +6,7 @@ from typing import Iterable
 from utils import config, registry, service
 
 
-def is_updates_active(service_names: Iterable[str]) -> bool:
+def is_services_running(service_names: Iterable[str]) -> bool:
     "Check if any windows update services are running."
 
     return any(
@@ -143,7 +143,7 @@ def backup_config(service_names: Iterable[str], filename: str) -> None:
 
     configuration = backup_config | services_config
     if not configuration:
-        return  # if empty, nothing to backup
+        return  # nothing to backup
 
     if not os.path.exists(config.BACKUP_DIR):
         os.mkdir(config.BACKUP_DIR)

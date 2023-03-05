@@ -11,7 +11,6 @@ class LoadingWidget(QFrame):
         self.setStyleSheet(styles.get("loading"))
 
     def setupWidgets(self) -> None:
-        """Setup the widgets in layout"""
         label = QLabel("<p align=center>Loading Packages...</p>")
 
         layout = QVBoxLayout(self)

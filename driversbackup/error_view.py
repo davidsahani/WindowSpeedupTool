@@ -2,7 +2,7 @@ from PyQt6.QtCore import QAbstractTableModel, QModelIndex, Qt
 from PyQt6.QtWidgets import (QHeaderView, QStackedWidget, QTableView,
                              QVBoxLayout, QWidget)
 
-from src.overlay import MessageOverlay
+from widgets.overlay import MessageOverlay
 
 
 class TableModel(QAbstractTableModel):
@@ -39,11 +39,10 @@ class TableView(QTableView):
         model = TableModel(self, self.errors)
         self.setModel(model)
         # Set column resizing
-        self.horizontalHeader().setSectionResizeMode(
-            0, QHeaderView.ResizeMode.Interactive)
-        self.horizontalHeader().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.ResizeToContents)
-        self.horizontalHeader().setStretchLastSection(True)
+        header = self.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setStretchLastSection(True)
 
 
 # *================================================

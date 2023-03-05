@@ -6,9 +6,9 @@ from PyQt6.QtGui import QContextMenuEvent
 from PyQt6.QtWidgets import (QHeaderView, QMenu, QMessageBox, QTableView,
                              QWidget)
 
-from src.process_terminal import Thread
-from src.table import Model
 from utils.power import PROCESS_STARTUP_INFO
+from widgets.process_terminal import Thread
+from widgets.table import Model
 
 
 class LoadPackages:
@@ -70,7 +70,7 @@ class PackagesModel(Model):
 
 class PackagesView(QTableView, LoadPackages):
     def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent)
+        QTableView.__init__(self, parent)
         LoadPackages.__init__(self)
         self.startLoadPackages()
         # setup table on thread finish

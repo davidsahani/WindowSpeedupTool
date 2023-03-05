@@ -39,7 +39,7 @@ class Message(QWidget):
             widget.setSizePolicy(  # set widgets size policy expanding
                 QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-    def setTextWarning(self, is_warning: bool = False) -> None:
+    def setTextColor(self, is_warning: bool = False) -> None:
         """Set label warning text color"""
         if is_warning and self._is_warning_color_set:
             return  # already warning color set
@@ -56,7 +56,7 @@ class Message(QWidget):
 
     def displayMessage(self, message: str, is_warning: bool = False) -> None:
         """Set label text and style, and start the timer"""
-        self.setTextWarning(is_warning)
+        self.setTextColor(is_warning)
         self.label.setText(message)
         self.initiateTimer()
 

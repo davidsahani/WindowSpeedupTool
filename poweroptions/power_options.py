@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import (QCheckBox, QFileDialog, QFrame, QGridLayout,
                              QVBoxLayout, QWidget)
 
 import styles
-from src.overlay import MessageOverlay
 from utils import power
+from widgets.overlay import MessageOverlay
 
 from .plan_settings import PlanSettings
 from .power_throttling import PowerThrottling
