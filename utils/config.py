@@ -5,7 +5,7 @@ from typing import Iterable
 from .service import display_name, startup_type, startup_value
 
 DEFAULT_DIR = ".\\config"
-BACKUP_DIR = ".\\backup_config"
+BACKUP_DIR = ".\\backup-config"
 
 LAPTOP_SERVICES = "laptop_services.json"
 NORMAL_SERVICES = "normal_services.json"
@@ -22,7 +22,7 @@ ADVANCEX_SERVICES = "advancex_services.json"
 WLAN_SERVICES = "wlan_services.json"
 
 
-def _load(filepath: str) -> dict[str, list[str]]:
+def load_file(filepath: str) -> dict[str, list[str]]:
     "Load service configuration from a JSON file."
 
     with open(filepath) as file:
@@ -38,14 +38,14 @@ def load(filename: str) -> dict[str, str]:
     """
     backup_file = os.path.join(BACKUP_DIR, filename)
     default_file = os.path.join(DEFAULT_DIR, filename)
-    default_config = {name: svc[0]
-                      for name, svc in _load(default_file).items()}
+    default_config = {name: svc[0] for name, svc in
+                      load_file(default_file).items()}
 
     if not os.path.exists(backup_file):
         return default_config
 
     return default_config | \
-        {name: svc[0] for name, svc in _load(backup_file).items()}
+        {name: svc[0] for name, svc in load_file(backup_file).items()}
 
 
 def backup(service_names: Iterable[str], filename: str) -> None:
@@ -53,7 +53,7 @@ def backup(service_names: Iterable[str], filename: str) -> None:
 
     backup_file = os.path.join(BACKUP_DIR, filename)
     if os.path.exists(backup_file):
-        backup_config = _load(backup_file)
+        backup_config = load_file(backup_file)
         if backup_config and all(
             service_name in service_names for service_name in backup_config
         ):
@@ -85,7 +85,7 @@ def backup_reg(service_names: Iterable[str], filename: str) -> None:
 
     backup_file = os.path.join(BACKUP_DIR, filename)
     if os.path.exists(backup_file):
-        backup_config = _load(backup_file)
+        backup_config = load_file(backup_file)
         if backup_config and all(
             service_name in service_names for service_name in backup_config
         ):

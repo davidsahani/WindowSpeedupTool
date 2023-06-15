@@ -216,7 +216,7 @@ class WindowsUpdate(QFrame):
                     self.updateActiveButton, thread, failed_services)
                 self.__thread.start()
                 msg = ""
-            case _:
+            case _:  # type: ignore
                 msg = ""  # to avoid variable unbound linter warning
                 raise ValueError(f"Invalid action parameter: {action}")
         if not msg:

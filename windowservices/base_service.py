@@ -91,7 +91,7 @@ class BaseService(QGroupBox):
                 widget.displayPrompt("Do you want to disable these services?")
                 widget.setConfirmText("Disable")
                 widget.connect(lambda svcs: self.runServices(svcs, action))
-            case _:
+            case _:  # type: ignore
                 raise ValueError(f"Invalid action parameter: {action}")
 
     def runServices(self, services: dict[str, str], action: Action) -> None:
@@ -110,7 +110,7 @@ class BaseService(QGroupBox):
             case Action.DISABLE:
                 self.__thread = Thread(self.disableServices, services)
                 self.progressbar.setFormat("Disabling services: %v/%m (%p%)")
-            case _:
+            case _:  # type: ignore
                 raise ValueError(f"Invalid action parameter: {action}")
         self._failed_services: dict[str, str] = {}
         self.__thread.start()
@@ -210,7 +210,7 @@ class BaseService(QGroupBox):
                 msg = f"{ratio} services failed to enable, would you like to see them?"
             case Action.DISABLE:
                 msg = f"{ratio} services failed to disable, would you like to see them?"
-            case _:
+            case _:  # type: ignore
                 raise ValueError(f"Invalid action parameter: {action}")
         self.promptShowFailedServices(self._failed_services, msg, action)
 
@@ -238,12 +238,12 @@ class BaseService(QGroupBox):
                 msg = "Failed to enable these services"
             case Action.DISABLE:
                 msg = "Failed to disable these services"
-            case _:
+            case _:  # type: ignore
                 raise ValueError(f"Invalid action parameter: {action}")
         self.err_win = ErrorWindow(services)
         self.err_win.displayMessage(msg, True)
 
-    # ? NOT IN USE, may be used later
+    # ? NOT IN USE, might be used later
     def showFailedServices(self, services: dict[str, str], action: Action) -> None:
         """Show failed services in service confirmation widget"""
         match action:
@@ -255,7 +255,7 @@ class BaseService(QGroupBox):
                 message = "Failed to enable services"
             case Action.DISABLE:
                 message = "Failed to disable services"
-            case _:
+            case _:  # type: ignore
                 raise ValueError(f"Invalid action parameter: {action}")
         widget = ConfirmServiceAction(
             self._parent, self.stacked_widget, services)

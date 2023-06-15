@@ -175,9 +175,9 @@ def set_startup_type(service_name: str, startup_type: str) -> int:
         case _:
             raise ValueError(f"{startup_type!r}, startup type is invalid")
 
-    cmd = ["sc", "config", service_name, "start=", start_type]
     return subprocess.Popen(
-        cmd, stdout=subprocess.DEVNULL, startupinfo=PROCESS_STARTUP_INFO).wait()
+        ["sc", "config", service_name, "start=", start_type],
+        stdout=subprocess.DEVNULL, startupinfo=PROCESS_STARTUP_INFO).wait()
 
 
 # **************************************************************************
@@ -219,36 +219,3 @@ def set_startup_value(service_name: str, start_value: int) -> int:
         return 0
     finally:
         winreg.CloseKey(key)
-
-
-# ? LAME WIN32 FUNCTION, doesn't support auto-delayed startup type
-def _set_startup_type(service_name: str, startup_type: int) -> int:
-    """Set the startup type of a windows service.
-
-    Parameters:
-    - service_name: The name of the service.
-    - startup_type: The startup type of the service.\
-      This should be an integer constant from the win32service module,
-      such as SERVICE_AUTO_START for "Automatic" startup or SERVICE_DEMAND_START for "Manual" startup.
-
-    Return:
-        0 on success, 1 on failure
-    """
-    try:
-        # Open the service
-        hscm = win32service.OpenSCManager(
-            None, None, win32service.SC_MANAGER_ALL_ACCESS)
-        hs = win32service.OpenService(  # type: ignore
-            hscm, service_name, win32service.SERVICE_ALL_ACCESS)
-
-        # Set the startup type
-        win32service.ChangeServiceConfig(  # type: ignore
-            hs, win32service.SERVICE_NO_CHANGE, startup_type,
-            win32service.SERVICE_NO_CHANGE, None, None, False, None, None, None, None)
-        # Close the service
-        win32service.CloseServiceHandle(hs)
-        win32service.CloseServiceHandle(hscm)
-    except win32service.error:
-        return 1
-    else:
-        return 0

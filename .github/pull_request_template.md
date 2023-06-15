@@ -42,4 +42,4 @@ Original | Updated
 :----------------------:|:-----------:
 ** original screenshot  | ** updated screenshot **
 
-[CONTRIBUTING.md]: https://github.com/Destroid1669/windowspeeduptool/blob/main/CONTRIBUTING.md
+[CONTRIBUTING.md]: https://github.com/davidsahani/windowspeeduptool/blob/main/CONTRIBUTING.md

@@ -1,12 +1,16 @@
+import os
+
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import (QCommandLinkButton, QFrame, QGridLayout,
-                             QProgressBar, QPushButton, QSizePolicy,
+                             QGroupBox, QProgressBar, QPushButton, QSizePolicy,
                              QSpacerItem, QStackedWidget, QVBoxLayout, QWidget)
 
 import styles
 from utils import config, power, service
 from widgets.overlay import MessageOverlay
 from windowservices.base_service import Action, BaseService
+from windowservices.confirm_action import ErrorWindow
 from windowservices.windows_services import AdvanceServices
 
 from .packages_uninstall import PackagesUninstall
@@ -122,6 +126,152 @@ class WindowsDefender(BaseService):
         self.message_overlay.displayMessage(msg, is_warning)
 
 
+class Recover(QGroupBox):
+    def __init__(self, parent: QWidget, message_overlay: MessageOverlay) -> None:
+        super().__init__(parent)
+        self.message_overlay = message_overlay
+        self.setupWidgets()
+        self.setStyleSheet("#RecoverButton { min-width: 100px }")
+
+    def setupWidgets(self) -> None:
+        revert_button = QPushButton("Revert")
+        restore_button = QPushButton("Restore")
+
+        revert_button.setObjectName("RecoverButton")
+        restore_button.setObjectName("RecoverButton")
+
+        revert_button.setToolTip("Disable saved backup configuration")
+        restore_button.setToolTip("Enable saved backup configuration")
+
+        revert_button.clicked.connect(self.promptRevert)  # type:ignore
+        restore_button.clicked.connect(self.promptRestore)  # type:ignore
+
+        layout = QGridLayout()
+        layout.addWidget(revert_button, 0, 0)
+        layout.addWidget(restore_button, 0, 1)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.setLayout(layout)
+
+    def promptRevert(self) -> None:
+        self.message_overlay.setConfirmText("Revert")
+        msg = "Do you want to disable saved backup-config services?"
+        self.message_overlay.displayPrompt(msg)
+        self.message_overlay.connect(self.revert)
+
+    def promptRestore(self) -> None:
+        self.message_overlay.setConfirmText("Restore")
+        msg = "Do you want to enable saved backup-config services?"
+        self.message_overlay.displayPrompt(msg)
+        self.message_overlay.connect(self.restore)
+
+    def promptRestart(self, message: str) -> None:
+        """Prompt the user to restart the system"""
+        self.message_overlay.setConfirmText("Restart")
+        self.message_overlay.displayPrompt(message)
+        self.message_overlay.connect(power.restart)
+
+    def promptShowFailed(self, message: str, services: dict[str, str], action: Action) -> None:
+        self.message_overlay.setConfirmText("Show")
+        self.message_overlay.displayPrompt(message, is_warning=True)
+        self.message_overlay.connect(self.showFailedServices, services, action)
+
+    def showFailedServices(self, services: dict[str, str], action: Action) -> None:
+        if action == Action.ENABLE:
+            msg = "Failed to enable these services"
+        else:
+            msg = "Failed to disable these services"
+        self.err_win = ErrorWindow(services)
+        self.err_win.displayMessage(msg, is_warning=True)
+
+    def revert(self) -> None:
+        """Disable saved configuration services"""
+        if not os.path.exists(config.BACKUP_DIR):
+            self.message_overlay.displayMessage(
+                "No backup configuration found", is_warning=True)
+            return
+
+        files = os.listdir(config.BACKUP_DIR)
+        if not files:
+            self.message_overlay.displayMessage(
+                "Backup directory is empty", is_warning=True)
+            return
+
+        failed_services: dict[str, str] = {}
+
+        for file in files:
+            if not file.endswith(".json"):
+                continue  # skip non json files
+
+            services = config.load_file(os.path.join(config.BACKUP_DIR, file))
+            for service_name, values in services.items():
+                start = values[0]
+                if start.isdigit():
+                    status = service.set_startup_value(service_name, 4)
+                else:
+                    status = service.set_startup_type(service_name, "disabled")
+
+                if status:  # if failed to disable service
+                    failed_services[service_name] = start
+
+        if failed_services:
+            length = len(failed_services)
+            if length <= 1:
+                msg = f"Failed to disable {length} service, would you like to see it?"
+            else:
+                msg = f"Failed to disable {length} services, would you like to see them?"
+            self.promptShowFailed(msg, failed_services, Action.DISABLE)
+        else:
+            self.promptRestart("Disabled saved backup configuration, Restart required!")  # noqa
+
+    def restore(self) -> None:
+        """Enable saved configuration services"""
+        if not os.path.exists(config.BACKUP_DIR):
+            self.message_overlay.displayMessage(
+                "No backup configuration found", is_warning=True)
+            return
+
+        files = os.listdir(config.BACKUP_DIR)
+        if not files:
+            self.message_overlay.displayMessage(
+                "Backup directory is empty", is_warning=True)
+            return
+
+        failed_services: dict[str, str] = {}
+
+        for file in files:
+            if not file.endswith(".json"):
+                continue  # skip non json file
+
+            services = config.load_file(os.path.join(config.BACKUP_DIR, file))
+            for service_name, values in services.items():
+                start = values[0]
+                if start.isdigit():
+                    status = service.set_startup_value(
+                        service_name, int(start))
+                else:
+                    status = service.set_startup_type(service_name, start)
+
+                if status:  # if failed to enable service
+                    failed_services[service_name] = start
+
+        if failed_services:
+            length = len(failed_services)
+            if length <= 1:
+                msg = f"Failed to enable {length} service, would you like to see it?"
+            else:
+                msg = f"Failed to enable {length} services, would you like to see them?"
+            self.promptShowFailed(msg, failed_services, Action.ENABLE)
+        else:
+            self.promptRestart("Enabled saved backup configuration, Restart required!")  # noqa
+
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        size = self.sizeHint()
+        parent_size = self.parentWidget().size()
+        pos_x = parent_size.width() - size.width()
+        pos_y = parent_size.height() - size.height() - 32
+        self.setGeometry(pos_x, pos_y, size.width(), size.height())
+
+
 # *================================================
 # *              ADVANCE OPTIONS                  *
 # *================================================
@@ -159,6 +309,8 @@ class AdvanceOptions(QFrame):
         uninstall_packages_button.setMaximumWidth(355)
         uninstall_packages_button.clicked.connect(  # type:ignore
             self.openPackagesUninstall)
+
+        self.recover_widget = Recover(self, self.message_overlay)
 
         layout = QVBoxLayout()
         layout.addWidget(self.makeWidget())

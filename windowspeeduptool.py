@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
         return frame
 
     def setCurrentIndex(self, idx: int, button: QPushButton) -> None:
-        """Set current stacked widget at the index"""
+        """Set current widget at the given index and update buttons."""
         widget = self.widgets.get(idx)
         if widget is None:
             _, cls = WIDGETS[idx]
@@ -98,9 +98,11 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
+    import os
     import sys
-
     import qdarkstyle  # type: ignore
+    os.chdir(os.path.dirname(__file__))
+
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet(  # type: ignore
         qt_api='pyqt6'))

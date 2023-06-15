@@ -54,9 +54,8 @@ class BorderWidget(Message):
 
     def onCancel(self) -> None:
         """Handle the cancel button press event"""
-        function = self.__cancel_function
-        if function is not None:
-            function()
+        if self.__cancel_function is not None:
+            self.__cancel_function()
 
 
 class CleanupView(QFrame):

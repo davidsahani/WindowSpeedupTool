@@ -100,8 +100,8 @@ class InputButton(QWidget):
     def keyPressEvent(self, a0: QKeyEvent) -> None:
         """Handle enter and escape key press events.
 
-        Run onConfirm on enter key press,
-        Run onCancel on escape key press
+        Call onConfirm on enter key press,
+        Call onCancel on escape key press
         """
         if not self.line_edit.hasFocus():
             return
@@ -248,8 +248,8 @@ class DisplaySleepTimeout(QGroupBox):
         minute = self.parse_time(value)
         status = power.change_setting_value('monitor-timeout-ac', minute)
         if not status:
-            return
-        msg = f"Failed to change ac display timeout with status code: {status}"
+            return  # on success
+        msg = f"Failed to change ac display timeout, status code: {status}"
         self.message_overlay.displayMessage(msg, True)
 
     def changeAcSleepTimeout(self, value: str) -> None:
@@ -257,8 +257,8 @@ class DisplaySleepTimeout(QGroupBox):
         minute = self.parse_time(value)
         status = power.change_setting_value('standby-timeout-ac', minute)
         if not status:
-            return
-        msg = f"Failed to change ac sleep timeout with status code: {status}"
+            return  # on success
+        msg = f"Failed to change ac sleep timeout, status code: {status}"
         self.message_overlay.displayMessage(msg, True)
 
     def changeDcDisplayTimeout(self, value: str) -> None:
@@ -266,8 +266,8 @@ class DisplaySleepTimeout(QGroupBox):
         minute = self.parse_time(value)
         status = power.change_setting_value('monitor-timeout-dc', minute)
         if not status:
-            return
-        msg = f"Failed to change dc display timeout with status code: {status}"
+            return  # on success
+        msg = f"Failed to change dc display timeout, status code: {status}"
         self.message_overlay.displayMessage(msg, True)
 
     def changeDcSleepTimeout(self, value: str) -> None:
@@ -275,8 +275,8 @@ class DisplaySleepTimeout(QGroupBox):
         minute = self.parse_time(value)
         status = power.change_setting_value('standby-timeout-dc', minute)
         if not status:
-            return
-        msg = f"Failed to change dc sleep timeout with status code: {status}"
+            return  # on success
+        msg = f"Failed to change dc sleep timeout, status code: {status}"
         self.message_overlay.displayMessage(msg, True)
 
 
@@ -455,9 +455,9 @@ class PlanSettings(QFrame):
             QMessageBox.StandardButton.Ok,
             QMessageBox.StandardButton.Cancel
         )
-        if answer != QMessageBox.StandardButton.Ok:
-            return
+        if answer == QMessageBox.StandardButton.Cancel:
+            return  # on cancel
         if not (status := power.delete_scheme(self.scheme_guid)):
-            self.switchToMaster()   # on success
+            return self.switchToMaster()   # on success
         msg = f"Failed to delete scheme: {self.scheme_name!r}, status code: {status}"
         self.message_overlay.displayMessage(msg, True)

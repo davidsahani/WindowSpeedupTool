@@ -109,9 +109,8 @@ class MessageClose(Message):
 
     def action(self) -> None:
         """Run the connected function on timeout"""
-        function = self.__function
-        if function is not None:
-            function()
+        if self.__function is not None:
+            self.__function()
 
     def connectTimeout(self, function: Callable[[], None]) -> None:
         """Connect the function to timeout event"""
@@ -228,24 +227,24 @@ class MessageOverlay(QWidget):
 
     def onConfirm(self) -> None:
         """Handle the confirm button press event"""
+        self.hide()  # hide the overlay
         function = self.__confirm_function
         if function is not None:
             func, args = function
             func(*args)
-        self.hide()
 
     def onCancel(self) -> None:
         """Handle the cancel button press event"""
+        self.hide()  # hide the overlay
         function = self.__cancel_function
         if function is not None:
             func, args = function
             func(*args)
-        self.hide()
 
     def onClose(self) -> None:
         """Handle the close button press event"""
+        self.hide()  # hide the overlay
         function = self.__close_function
         if function is not None:
             func, args = function
             func(*args)
-        self.hide()

@@ -1,7 +1,5 @@
 import datetime
 import platform
-from collections import OrderedDict
-
 import wmi
 
 C = wmi.WMI()
@@ -29,16 +27,16 @@ def processor() -> list[tuple[str, str | int]]:
     return info
 
 
-def gpus() -> OrderedDict[str, list[tuple[str, str]]]:
+def gpus() -> list[list[tuple[str, str]]]:
     "Return gpus information."
 
-    info: OrderedDict[str, list[tuple[str, str]]] = OrderedDict()
+    info: list[list[tuple[str, str]]] = []
 
     for gpu in C.Win32_VideoController():
-        info[gpu.DeviceID] = [
+        info.append([
             ("DeviceID", gpu.DeviceID),
             ("Name", gpu.Name),
-            ("Caption", gpu.Caption),
+            # ("Caption", gpu.Caption),
             ("DriverVersion", gpu.DriverVersion),
             ("VideoProcessor", gpu.VideoProcessor),
             ("AdapterRam", f"{(gpu.AdapterRAM or 0) / 10 ** 9} GB"),
@@ -52,18 +50,17 @@ def gpus() -> OrderedDict[str, list[tuple[str, str]]]:
             ("CurrentScanMode", gpu.CurrentScanMode),
             ("CurrentBitsPerPixel", gpu.CurrentBitsPerPixel),
             ("CurrentNumberOfColors", gpu.CurrentNumberOfColors),
-        ]
+        ])
     return info
 
 
-def rams() -> OrderedDict[str, list[tuple[str, str]]]:
+def rams() -> list[list[tuple[str, str]]]:
     "Return rams information."
 
-    info: OrderedDict[str, list[tuple[str, str]]] = OrderedDict()
+    info: list[list[tuple[str, str]]] = []
 
     for memory in C.Win32_PhysicalMemory():
-        info[memory.DeviceLocator] = [
-            ("DeviceLocator", memory.DeviceLocator),
+        info.append([
             ("Type", memory.MemoryType),
             ("Capacity", f"{int(memory.Capacity or 0) / 10 ** 9} GB"),
             ("Speed", f"{memory.Speed} Mhz"),
@@ -74,39 +71,39 @@ def rams() -> OrderedDict[str, list[tuple[str, str]]]:
             ("InterleavePosition", memory.InterleavePosition),
 
             ("Manufacturer", memory.Manufacturer),
-            ("FormFactor", memory.FormFactor),
             ("Part Number", memory.PartNumber.strip()),
             ("SerialNumber", memory.SerialNumber),
-            ("Tag", memory.Tag),
-        ]
+            ("FormFactor", memory.FormFactor),
+            ("DeviceLocator", memory.DeviceLocator),
+        ])
     return info
 
 
-def disks() -> OrderedDict[str, list[tuple[str, str]]]:
+def disks() -> list[list[tuple[str, str]]]:
     "Return disks information."
 
-    info: OrderedDict[str, list[tuple[str, str]]] = OrderedDict()
+    info: list[list[tuple[str, str]]] = []
 
     for disk in C.Win32_DiskDrive():
-        info[disk.Model] = [
+        info.append([
             ("Model", disk.Model),
-            ("Status", disk.Status),
             ("Size", f"{int(disk.Size or 0) / 10 ** 9} GB"),
             ("Interface Type", disk.InterfaceType),
             ("Media Type", disk.MediaType),
+            ("Status", disk.Status),
             ("Partitions", disk.Partitions),
             ("Serial Number", disk.SerialNumber.strip()),
-        ]
+        ])
     return info
 
 
-def net_adapters() -> OrderedDict[str, list[tuple[str, str]]]:
+def net_adapters() -> list[list[tuple[str, str]]]:
     "Return network adapters information."
 
-    info: OrderedDict[str, list[tuple[str, str]]] = OrderedDict()
+    info: list[list[tuple[str, str]]] = []
 
     for adapter in C.Win32_NetworkAdapter():
-        info[adapter.Name] = [
+        info.append([
             ("Name", adapter.Name),
             ("Description", adapter.Description),
             ("MAC Address", adapter.MACAddress),
@@ -118,7 +115,7 @@ def net_adapters() -> OrderedDict[str, list[tuple[str, str]]]:
             ("ProductName", adapter.ProductName),
             ("MaxNumberControlled", adapter.MaxNumberControlled),
             ("AdapterTypeID", adapter.AdapterTypeID),
-        ]
+        ])
     return info
 
 

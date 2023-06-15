@@ -1,5 +1,3 @@
-from typing import OrderedDict
-
 from PyQt6.QtCore import QEvent, QPoint, Qt
 from PyQt6.QtGui import QFontMetrics, QPainter
 from PyQt6.QtWidgets import (QApplication, QFrame, QGridLayout, QGroupBox,
@@ -21,7 +19,6 @@ class LineSpacingLabel(QLabel):
             painter.drawText(QPoint(0, int(y) + metrics.ascent()), line)
             y += line_height
         painter.end()
-
         # Adjust widget size respect to line spacing
         height = y + metrics.descent() - 6.5
         self.setFixedHeight(int(height))
@@ -50,50 +47,47 @@ class SystemInfo(QFrame):
 
     def makeWidget(self) -> QWidget:
         """Make main widget for systeminfo"""
-        processor = self.makeGroupWidget(sysinfo.processor())
-        gpus = self.makeGroupWidget(sysinfo.gpus())
-        rams = self.makeGroupWidget(sysinfo.rams())
-        disks = self.makeGroupWidget(sysinfo.disks())
-        net_adapters = self.makeGroupWidget(sysinfo.net_adapters())
-        motherboard = self.makeGroupWidget(sysinfo.motherboard())
-        os = self.makeGroupWidget(sysinfo.os_info())  # type: ignore
-
-        processor.setTitle("Processor")
-        gpus.setTitle("Gpu")
-        rams.setTitle("Ram")
-        disks.setTitle("Disk")
-        net_adapters.setTitle("Network Adapter")
-        motherboard.setTitle("Motherboard")
-        os.setTitle("Operating System")
-
         widget = QWidget(self)
-        layout = QVBoxLayout(self)
-        layout.addWidget(processor)
-        layout.addWidget(gpus)
-        layout.addWidget(rams)
-        layout.addWidget(disks)
-        layout.addWidget(net_adapters)
-        layout.addWidget(motherboard)
-        layout.addWidget(os)
+        layout = QVBoxLayout(widget)
         layout.setContentsMargins(0, 0, 0, 0)
+
+        widget_data = [
+            ("Processor", self.formatText(sysinfo.processor())),
+            ("Gpu", self.formatTextList(sysinfo.gpus())),
+            ("Ram", self.formatTextList(sysinfo.rams())),
+            ("Disk", self.formatTextList(sysinfo.disks())),
+            ("Network Adapter", self.formatTextList(sysinfo.net_adapters())),
+            ("Motherboard", self.formatText(sysinfo.motherboard())),
+            ("Operating System", self.formatText(
+                sysinfo.os_info()))  # type: ignore
+        ]
+
+        for title, data in widget_data:
+            group_widget = self.makeGroupTextWidget(data)
+            group_widget.setTitle(title)
+            layout.addWidget(group_widget)
+
         widget.setLayout(layout)
         return widget
 
-    def makeGroupWidget(self, values: list[tuple[str, str | int]] |
-                        OrderedDict[str, list[tuple[str, str]]]) -> QGroupBox:
-        """Make group widget for values"""
-        if isinstance(values, list):
-            text = '\n'.join((f"{name}: {value}" for name, value in values))
-        elif len(values) == 1:
-            text = '\n'.join(
-                (f"{name}: {value}" for name, value in list(values.values())[0]))
-        else:
-            text = ''
-            for _values in values.values():
-                text += '\n'.join((f"{name}: {value}" for name,
-                                  value in _values))
-                text += '\n\n'
-            text = text.rstrip('\n')
+    @staticmethod
+    def formatText(values: list[tuple[str, str | int]]) -> str:
+        """Format text for group widget"""
+        return '\n'.join((f"{name}: {value}" for name, value in values))
+
+    @staticmethod
+    def formatTextList(values: list[list[tuple[str, str]]]) -> str:
+        """Format text for group widget"""
+        res: list[str] = []
+        for _values in values:
+            res.append(
+                '\n'.join((f"{name}: {value}" for name, value in _values)))
+            res.append('\n\n')
+        res.pop()  # remove last '\n'
+        return ''.join(res)
+
+    def makeGroupTextWidget(self, text: str) -> QGroupBox:
+        """Make Group widget with specified text."""
         label = LineSpacingLabel(text)
 
         copy_button = QPushButton()
@@ -111,5 +105,5 @@ class SystemInfo(QFrame):
         return gbox
 
     def copyTextToClipboard(self, text: str) -> None:
-        """Copy text to clipboard."""
+        """Copy text to the clipboard."""
         QApplication.clipboard().setText(text)

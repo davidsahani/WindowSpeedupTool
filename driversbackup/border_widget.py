@@ -44,9 +44,8 @@ class ActionWidget(QWidget):
 
     def onBackupPress(self) -> None:
         """Handle backup button press event"""
-        function = self.__function
-        if function is not None:
-            function()
+        if self.__function is not None:
+            self.__function()
 
     def connect(self, function: Callable[[], None]) -> None:
         """Connect the function to backup button press event"""

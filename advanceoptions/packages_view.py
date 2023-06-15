@@ -109,11 +109,10 @@ class PackagesView(QTableView, LoadPackages):
             QMessageBox.StandardButton.Ok,
             QMessageBox.StandardButton.Cancel
         )
-        if answer != QMessageBox.StandardButton.Ok:
-            return
-        function = self.__function
-        if function is not None:
-            function(row)
+        if answer == QMessageBox.StandardButton.Cancel:
+            return  # on cancel
+        if self.__function is not None:
+            self.__function(row)
 
     def connectUninstall(self, function: Callable[[int], None]) -> None:
         """Connect the function to uninstall action event

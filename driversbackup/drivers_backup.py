@@ -235,6 +235,4 @@ class DriversBackup(QFrame):
             QMessageBox.StandardButton.Ok,
             QMessageBox.StandardButton.Cancel
         )
-        if answer != QMessageBox.StandardButton.Ok:
-            return True
-        return False
+        return answer == QMessageBox.StandardButton.Cancel
