@@ -1,43 +1,27 @@
 {
-    "FrameServer": [
-        "manual",
-        "Windows Camera Frame Server"
-    ],
     "DusmSvc": [
         "automatic",
         "Data Usage"
     ],
-    "Spooler": [
-        "automatic",
-        "Print Spooler"
-    ],
-    "DiagTrack": [
-        "automatic",
-        "Connected User Experiences and Telemetry"
-    ],
-    "stisvc": [
-        "automatic",
-        "Windows Image Acquisition (WIA)"
+    "DsSvc": [
+        "manual",
+        "Data Sharing Service"
     ],
     "WSearch": [
         "automatic-delayed",
         "Windows Search"
     ],
-    "MapsBroker": [
-        "automatic-delayed",
-        "Downloaded Maps Manager"
-    ],
     "lfsvc": [
         "manual",
         "Geolocation Service"
     ],
-    "bthserv": [
-        "manual",
-        "Bluetooth Support Service"
+    "Spooler": [
+        "automatic",
+        "Print Spooler"
     ],
-    "PhoneSvc": [
+    "PrintNotify": [
         "manual",
-        "Phone Service"
+        "Printer Extensions and Notifications"
     ],
     "WbioSrvc": [
         "manual",
@@ -47,105 +31,21 @@
         "manual",
         "Touch Keyboard and Handwriting Panel Service"
     ],
-    "SEMgrSvc": [
+    "hidserv": [
         "manual",
-        "Payments and NFC/SE Manager"
+        "Human Interface Device Service"
     ],
-    "seclogon": [
+    "PhoneSvc": [
         "manual",
-        "Secondary Logon"
-    ],
-    "XboxNetApiSvc": [
-        "manual",
-        "Xbox Live Networking Service"
-    ],
-    "icssvc": [
-        "manual",
-        "Windows Mobile Hotspot Service"
-    ],
-    "DsSvc": [
-        "manual",
-        "Data Sharing Service"
+        "Phone Service"
     ],
     "RmSvc": [
         "manual",
         "Radio Management Service"
     ],
-    "wcncsvc": [
-        "manual",
-        "Windows Connect Now - Config Registrar"
-    ],
-    "BTAGService": [
-        "manual",
-        "Bluetooth Audio Gateway Service"
-    ],
-    "BDESVC": [
-        "manual",
-        "BitLocker Drive Encryption Service"
-    ],
-    "Fax": [
-        "manual",
-        "Fax"
-    ],
-    "TapiSrv": [
-        "manual",
-        "Telephony"
-    ],
-    "LxpSvc": [
-        "manual",
-        "Language Experience Service"
-    ],
-    "SharedRealitySvc": [
-        "manual",
-        "Spatial Data Service"
-    ],
-    "SCardSvr": [
-        "manual",
-        "Smart Card"
-    ],
-    "ScDeviceEnum": [
-        "manual",
-        "Smart Card Device Enumeration Service"
-    ],
-    "SCPolicySvc": [
-        "manual",
-        "Smart Card Removal Policy"
-    ],
-    "CertPropSvc": [
-        "manual",
-        "Certificate Propagation"
-    ],
-    "RetailDemo": [
-        "manual",
-        "Retail Demo Service"
-    ],
     "WalletService": [
         "manual",
         "WalletService"
-    ],
-    "WpcMonSvc": [
-        "manual",
-        "Parental Controls"
-    ],
-    "PrintNotify": [
-        "manual",
-        "Printer Extensions and Notifications"
-    ],
-    "GraphicsPerfSvc": [
-        "manual",
-        "GraphicsPerfSvc"
-    ],
-    "WiaRpc": [
-        "manual",
-        "Still Image Acquisition Events"
-    ],
-    "spectrum": [
-        "manual",
-        "Windows Perception Service"
-    ],
-    "perceptionsimulation": [
-        "manual",
-        "Windows Perception Simulation Service"
     ],
     "TermService": [
         "manual",
@@ -162,57 +62,5 @@
     "wisvc": [
         "manual",
         "Windows Insider Service"
-    ],
-    "AppVClient": [
-        "manual",
-        "Microsoft App-V Client"
-    ],
-    "HvHost": [
-        "manual",
-        "HV Host Service"
-    ],
-    "vmickvpexchange": [
-        "manual",
-        "Hyper-V Data Exchange Service"
-    ],
-    "vmicguestinterface": [
-        "manual",
-        "Hyper-V Guest Service Interface"
-    ],
-    "vmicshutdown": [
-        "manual",
-        "Hyper-V Guest Shutdown Service"
-    ],
-    "vmicheartbeat": [
-        "manual",
-        "Hyper-V Heartbeat Service"
-    ],
-    "vmicvmsession": [
-        "manual",
-        "Hyper-V PowerShell Direct Service"
-    ],
-    "vmicrdv": [
-        "manual",
-        "Hyper-V Remote Desktop Virtualization Service"
-    ],
-    "vmictimesync": [
-        "manual",
-        "Hyper-V Time Synchronization Service"
-    ],
-    "vmicvss": [
-        "manual",
-        "Hyper-V Volume Shadow Copy Requestor"
-    ],
-    "XboxGipSvc": [
-        "manual",
-        "Xbox Accessory Management Service"
-    ],
-    "XblAuthManager": [
-        "manual",
-        "Xbox Live Auth Manager"
-    ],
-    "XblGameSave": [
-        "manual",
-        "Xbox Live Game Save"
     ]
 }

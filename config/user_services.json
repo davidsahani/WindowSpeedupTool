@@ -1,0 +1,74 @@
+{
+    "CDPUserSvc": [
+        "automatic",
+        "Connected Devices Platform User Service"
+    ],
+    "OneSyncSvc": [
+        "automatic-delayed",
+        "Sync Host"
+    ],
+    "cbdhsvc": [
+        "manual",
+        "Clipboard User Service"
+    ],
+    "WpnUserService": [
+        "automatic",
+        "Windows Push Notifications User Service"
+    ],
+    "BluetoothUserService": [
+        "manual",
+        "Bluetooth User Support Service"
+    ],
+    "ConsentUxUserSvc": [
+        "manual",
+        "ConsentUX"
+    ],
+    "DevicesFlowUserSvc": [
+        "manual",
+        "DevicesFlow"
+    ],
+    "DevicePickerUserSvc": [
+        "manual",
+        "DevicePicker"
+    ],
+    "DeviceAssociationBrokerSvc": [
+        "manual",
+        "DeviceAssociationBroker"
+    ],
+    "AarSvc": [
+        "manual",
+        "Agent Activation Runtime"
+    ],
+    "PimIndexMaintenanceSvc": [
+        "manual",
+        "Contact Data"
+    ],
+    "UserDataSvc": [
+        "manual",
+        "User Data Access"
+    ],
+    "UnistoreSvc": [
+        "manual",
+        "User Data Storage"
+    ],
+    "MessagingService": [
+        "manual",
+        "MessagingService"
+    ],
+    "PrintWorkflowUserSvc": [
+        "manual",
+        "PrintWorkflow"
+    ],
+    "CaptureService": [
+        "manual",
+        "CaptureService"
+    ],
+    "BcastDVRUserService": [
+        "manual",
+        "GameDVR and Broadcast User Service"
+    ],
+    "CredentialEnrollmentManagerUserSvc": [
+        "manual",
+        "CredentialEnrollmentManagerUserSvc"
+    ]
+}

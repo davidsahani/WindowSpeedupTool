@@ -1,0 +1,42 @@
+{
+    "TokenBroker": [
+        "manual",
+        "Web Account Manager"
+    ],
+    "wlidsvc": [
+        "manual",
+        "Microsoft Account Sign-in Assistant"
+    ],
+    "InstallService": [
+        "manual",
+        "Microsoft Store Install Service"
+    ],
+    "PushToInstall": [
+        "manual",
+        "Windows PushToInstall Service"
+    ],
+    "NcbService": [
+        "manual",
+        "Network Connection Broker"
+    ],
+    "LicenseManager": [
+        "manual",
+        "Windows License Manager Service"
+    ],
+    "AppXSvc": [
+        "manual",
+        "AppX Deployment Service (AppXSVC)"
+    ],
+    "ClipSVC": [
+        "manual",
+        "Client License Service (ClipSVC)"
+    ],
+    "SDRSVC": [
+        "manual",
+        "Windows Backup"
+    ],
+    "wbengine": [
+        "manual",
+        "Block Level Backup Engine Service"
+    ]
+}

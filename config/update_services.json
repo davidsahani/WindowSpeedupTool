@@ -1,18 +1,18 @@
 {
     "UsoSvc": [
-        "automatic-delayed",
-        "2"
+        "automatic",
+        "Update Orchestrator Service"
     ],
     "wuauserv": [
         "automatic-delayed",
-        "2"
+        "Windows Update"
     ],
     "dosvc": [
-        "automatic-delayed",
-        "2"
+        "automatic",
+        "Delivery Optimization"
     ],
     "WaaSMedicSvc": [
         "manual",
-        "3"
+        "Windows Update Medic Service"
     ]
 }

@@ -3,17 +3,9 @@
         "automatic",
         "SysMain"
     ],
-    "LanmanServer": [
+    "FontCache": [
         "automatic",
-        "Server"
-    ],
-    "EventSystem": [
-        "automatic",
-        "COM+ Event System"
-    ],
-    "ShellHWDetection": [
-        "automatic",
-        "Shell Hardware Detection"
+        "Windows Font Cache Service"
     ],
     "Themes": [
         "automatic",
@@ -23,29 +15,9 @@
         "automatic",
         "Workstation"
     ],
-    "FontCache": [
-        "automatic",
-        "Windows Font Cache Service"
-    ],
-    "DPS": [
-        "automatic",
-        "Diagnostic Policy Service"
-    ],
-    "TrkWks": [
-        "automatic",
-        "Distributed Link Tracking Client"
-    ],
-    "RasMan": [
-        "automatic",
-        "Remote Access Connection Manager"
-    ],
-    "SENS": [
-        "automatic",
-        "System Event Notification Service"
-    ],
-    "WpnService": [
-        "automatic",
-        "Windows Push Notifications System Service"
+    "StorSvc": [
+        "manual",
+        "Storage Service"
     ],
     "DispBrokerDesktopSvc": [
         "automatic-delayed",
@@ -55,292 +27,28 @@
         "manual",
         "Display Enhancement Service"
     ],
-    "CDPSvc": [
-        "automatic-delayed",
-        "Connected Devices Platform Service"
-    ],
-    "WlanSvc": [
-        "manual",
-        "WLAN AutoConfig"
-    ],
-    "BthAvctpSvc": [
-        "manual",
-        "AVCTP service"
-    ],
-    "BITS": [
-        "manual",
-        "Background Intelligent Transfer Service"
-    ],
-    "PlugPlay": [
-        "manual",
-        "Plug and Play"
-    ],
-    "upnphost": [
-        "manual",
-        "UPnP Device Host"
-    ],
-    "VaultSvc": [
-        "manual",
-        "Credential Manager"
-    ],
-    "TokenBroker": [
-        "manual",
-        "Web Account Manager"
-    ],
-    "IKEEXT": [
-        "manual",
-        "IKE and AuthIP IPsec Keying Modules"
-    ],
-    "DeviceAssociationService": [
-        "manual",
-        "Device Association Service"
-    ],
-    "WdiServiceHost": [
-        "manual",
-        "Diagnostic Service Host"
-    ],
-    "WdiSystemHost": [
-        "manual",
-        "Diagnostic System Host"
-    ],
-    "PcaSvc": [
-        "manual",
-        "Program Compatibility Assistant Service"
-    ],
-    "MSDTC": [
-        "manual",
-        "Distributed Transaction Coordinator"
-    ],
-    "DevQueryBroker": [
-        "manual",
-        "DevQuery Background Discovery Broker"
-    ],
-    "SharedAccess": [
-        "manual",
-        "Internet Connection Sharing (ICS)"
-    ],
-    "DeviceInstall": [
-        "manual",
-        "Device Install Service"
-    ],
-    "DsmSvc": [
-        "manual",
-        "Device Setup Manager"
-    ],
-    "wlidsvc": [
-        "manual",
-        "Microsoft Account Sign-in Assistant"
-    ],
-    "InstallService": [
-        "manual",
-        "Microsoft Store Install Service"
-    ],
-    "NetSetupSvc": [
-        "manual",
-        "Network Setup Service"
-    ],
-    "NcdAutoSetup": [
-        "manual",
-        "Network Connected Devices Auto-Setup"
-    ],
-    "StorSvc": [
-        "manual",
-        "Storage Service"
-    ],
-    "SstpSvc": [
-        "manual",
-        "Secure Socket Tunneling Protocol Service"
-    ],
-    "CscService": [
-        "manual",
-        "Offline Files"
-    ],
-    "lmhosts": [
-        "manual",
-        "TCP/IP NetBIOS Helper"
-    ],
-    "SSDPSRV": [
-        "manual",
-        "SSDP Discovery"
-    ],
-    "fdPHost": [
-        "manual",
-        "Function Discovery Provider Host"
-    ],
-    "FDResPub": [
-        "manual",
-        "Function Discovery Resource Publication"
-    ],
-    "COMSysApp": [
-        "manual",
-        "COM+ System Application"
-    ],
-    "NcbService": [
-        "manual",
-        "Network Connection Broker"
-    ],
-    "SDRSVC": [
-        "manual",
-        "Windows Backup"
-    ],
-    "smphost": [
-        "manual",
-        "Microsoft Storage Spaces SMP"
-    ],
-    "QWAVE": [
-        "manual",
-        "Quality Windows Audio Video Experience"
-    ],
     "WarpJITSvc": [
         "manual",
         "WarpJITSvc"
     ],
-    "PolicyAgent": [
-        "manual",
-        "IPsec Policy Agent"
-    ],
-    "W32Time": [
-        "manual",
-        "Windows Time"
-    ],
-    "LicenseManager": [
-        "manual",
-        "Windows License Manager Service"
-    ],
-    "WerSvc": [
-        "manual",
-        "Windows Error Reporting Service"
-    ],
-    "diagsvc": [
-        "manual",
-        "Diagnostic Execution Service"
-    ],
-    "diagnosticshub.standardcollector.service": [
-        "manual",
-        "Microsoft (R) Diagnostics Hub Standard Collector Service"
-    ],
-    "PushToInstall": [
-        "manual",
-        "Windows PushToInstall Service"
-    ],
-    "wbengine": [
-        "manual",
-        "Block Level Backup Engine Service"
-    ],
-    "EFS": [
-        "manual",
-        "Encrypting File System (EFS)"
-    ],
-    "VacSvc": [
-        "manual",
-        "Volumetric Audio Compositor Service"
-    ],
-    "ALG": [
-        "manual",
-        "Application Layer Gateway Service"
-    ],
-    "AppMgmt": [
-        "manual",
-        "Application Management"
-    ],
-    "AppReadiness": [
-        "manual",
-        "App Readiness"
-    ],
-    "AssignedAccessManagerSvc": [
-        "manual",
-        "AssignedAccessManager Service"
-    ],
-    "PeerDistSvc": [
-        "manual",
-        "BranchCache"
-    ],
-    "autotimesvc": [
-        "manual",
-        "Cellular Time"
-    ],
-    "vds": [
-        "manual",
-        "Virtual Disk"
-    ],
-    "defragsvc": [
-        "manual",
-        "Optimize drives"
-    ],
-    "PerfHost": [
-        "manual",
-        "Performance Counter DLL Host"
-    ],
-    "pla": [
-        "manual",
-        "Performance Logs & Alerts"
-    ],
-    "wlpasvc": [
-        "manual",
-        "Local Profile Assistant Service"
-    ],
-    "RpcLocator": [
-        "manual",
-        "Remote Procedure Call (RPC) Locator"
-    ],
-    "Wecsvc": [
-        "manual",
-        "Windows Event Collector"
-    ],
-    "TroubleshootingSvc": [
-        "manual",
-        "Recommended Troubleshooting Service"
-    ],
-    "wercplsupport": [
-        "manual",
-        "Problem Reports and Solutions Control Panel Support"
-    ],
-    "fhsvc": [
-        "manual",
-        "File History Service"
-    ],
-    "Eaphost": [
-        "manual",
-        "Extensible Authentication Protocol"
-    ],
-    "DmEnrollmentSvc": [
-        "manual",
-        "Device Management Enrollment Service"
-    ],
-    "lltdsvc": [
-        "manual",
-        "Link-Layer Topology Discovery Mapper"
-    ],
-    "MSiSCSI": [
-        "manual",
-        "Microsoft iSCSI Initiator Service"
-    ],
-    "WinRM": [
-        "manual",
-        "Windows Remote Management (WS-Management)"
-    ],
-    "SensorDataService": [
-        "manual",
-        "Sensor Data Service"
-    ],
-    "SensorService": [
-        "manual",
-        "Sensor Service"
-    ],
-    "SensrSvc": [
-        "manual",
-        "Sensor Monitoring Service"
-    ],
-    "workfolderssvc": [
-        "manual",
-        "Work Folders"
+    "CDPSvc": [
+        "automatic-delayed",
+        "Connected Devices Platform Service"
     ],
     "wmiApSrv": [
         "manual",
         "WMI Performance Adapter"
     ],
-    "WFDSConMgrSvc": [
+    "W32Time": [
         "manual",
-        "Wi-Fi Direct Services Connection Manager Service"
+        "Windows Time"
+    ],
+    "SEMgrSvc": [
+        "manual",
+        "Payments and NFC/SE Manager"
+    ],
+    "WpnService": [
+        "automatic",
+        "Windows Push Notifications System Service"
     ]
 }

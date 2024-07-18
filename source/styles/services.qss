@@ -1,0 +1,44 @@
+QPushButton {
+    padding: 6px;
+    color: Cyan;
+    font-size: 8pt;
+    font-weight: bold;
+    min-width: 150px;
+    border-radius: 5px;
+}
+QPushButton:hover {
+    color: #ffffff;
+    background-color: Teal;
+}
+QPushButton:pressed {
+    background-color: Turquoise;
+}
+QPushButton:checked {
+    color: #b600ffff;
+    background-color: #f1455364;
+}
+QPushButton:disabled {
+    color: SteelBlue;
+}
+
+#ProgressCancelButton {
+    color: #00E7FF;
+    font-size: 9pt;
+    min-width: 45px;
+}
+#ProgressCancelButton:hover {
+    color: #ffffff;
+    background-color: #fa100a;
+}
+
+#RecoverButton {
+    min-width: 100px
+}
+
+QCommandLinkButton {
+    min-width: 345px
+}
+
+QScrollArea {
+  border: 0px;
+}

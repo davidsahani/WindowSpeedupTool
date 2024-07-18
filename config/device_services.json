@@ -1,0 +1,42 @@
+{
+    "ShellHWDetection": [
+        "automatic",
+        "Shell Hardware Detection"
+    ],
+    "PlugPlay": [
+        "manual",
+        "Plug and Play"
+    ],
+    "WPDBusEnum": [
+        "manual",
+        "Portable Device Enumerator Service"
+    ],
+    "upnphost": [
+        "manual",
+        "UPnP Device Host"
+    ],
+    "SSDPSRV": [
+        "manual",
+        "SSDP Discovery"
+    ],
+    "DeviceInstall": [
+        "manual",
+        "Device Install Service"
+    ],
+    "DsmSvc": [
+        "manual",
+        "Device Setup Manager"
+    ],
+    "DevQueryBroker": [
+        "manual",
+        "DevQuery Background Discovery Broker"
+    ],
+    "NetSetupSvc": [
+        "manual",
+        "Network Setup Service"
+    ],
+    "NcdAutoSetup": [
+        "manual",
+        "Network Connected Devices Auto-Setup"
+    ]
+}

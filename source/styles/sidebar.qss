@@ -1,0 +1,28 @@
+QPushButton {
+    color: #00E7FF;
+    font-size: 10pt;
+    font-weight: bold;
+    min-width: 40px;
+    padding: 5px;
+    border-radius: 0px;
+}
+QPushButton:checked {
+    color: white;
+    background-color: #9605cdfa;
+}
+QPushButton:hover {
+    color: white;
+    background-color: #7300ffff;
+}
+QPushButton:pressed {
+    background-color: Teal;
+}
+
+QMessageBox QPushButton {
+    color: Cyan;
+    padding: 6px;
+    font-size: 8.6pt;
+    font-weight: bold;
+    min-width: 50px;
+    border-radius: 5px;
+}

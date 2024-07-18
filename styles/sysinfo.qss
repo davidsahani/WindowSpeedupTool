@@ -1,9 +1,0 @@
-QScrollArea {
-  border: 0px;
-}
-
-#CopyButton {
-  border-radius: 5px;
-  padding: 6px;
-  image: url('./icons/copy.svg');
-}

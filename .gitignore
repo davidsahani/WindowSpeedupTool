@@ -2,8 +2,7 @@
 __pycache__/
 # vscode configurations
 .vscode
-# backup configs
-backup-config
 # build output dirs
-build/project
-build/output
+build
+# backup configs
+config.backup

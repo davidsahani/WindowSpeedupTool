@@ -1,0 +1,38 @@
+{
+    "DiagTrack": [
+        "automatic",
+        "Connected User Experiences and Telemetry"
+    ],
+    "DPS": [
+        "automatic",
+        "Diagnostic Policy Service"
+    ],
+    "WdiServiceHost": [
+        "manual",
+        "Diagnostic Service Host"
+    ],
+    "WdiSystemHost": [
+        "manual",
+        "Diagnostic System Host"
+    ],
+    "diagsvc": [
+        "manual",
+        "Diagnostic Execution Service"
+    ],
+    "diagnosticshub.standardcollector.service": [
+        "manual",
+        "Microsoft (R) Diagnostics Hub Standard Collector Service"
+    ],
+    "PcaSvc": [
+        "manual",
+        "Program Compatibility Assistant Service"
+    ],
+    "TroubleshootingSvc": [
+        "manual",
+        "Recommended Troubleshooting Service"
+    ],
+    "WerSvc": [
+        "manual",
+        "Windows Error Reporting Service"
+    ]
+}

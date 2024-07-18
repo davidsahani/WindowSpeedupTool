@@ -1,8 +1,8 @@
-psutil==5.9.4
-pywin32==305
+psutil==5.9.8
+pywin32==306
+PyQt6==6.7.0
+PyQt6-Qt6==6.7.1
+PyQt6-sip==13.6.0
+QDarkStyle==3.2.3
+QtPy==2.4.1
 WMI==1.5.1
-QtPy==2.3.0
-PyQt6==6.4.0
-PyQt6-Qt6==6.4.1
-PyQt6-sip==13.4.0
-QDarkStyle==3.1

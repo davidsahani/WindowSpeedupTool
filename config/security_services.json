@@ -1,34 +1,34 @@
 {
     "BFE": [
-        "2",
+        "automatic",
         "Base Filtering Engine"
     ],
+    "mpssvc": [
+        "automatic",
+        "Windows Defender Firewall"
+    ],
+    "SgrmBroker": [
+        "automatic-delayed",
+        "System Guard Runtime Monitor Broker"
+    ],
     "sppsvc": [
-        "2",
+        "automatic-delayed",
         "Software Protection"
     ],
     "wscsvc": [
-        "2",
+        "automatic-delayed",
         "Security Center"
     ],
+    "SecurityHealthService": [
+        "manual",
+        "Windows Security Service"
+    ],
     "SamSs": [
-        "2",
+        "automatic",
         "Security Accounts Manager"
     ],
-    "SgrmBroker": [
-        "2",
-        "System Guard Runtime Monitor Broker"
-    ],
-    "mpssvc": [
-        "2",
-        "Windows Defender Firewall"
-    ],
-    "WinDefend": [
-        "2",
-        "Windows Defender Antivirus Service"
-    ],
-    "SecurityHealthService": [
-        "3",
-        "Windows Security Service"
+    "LanmanServer": [
+        "automatic",
+        "Server"
     ]
 }

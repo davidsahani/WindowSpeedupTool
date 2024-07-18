@@ -1,0 +1,10 @@
+QLabel {
+    background-color: DarkSlateGray;
+    color: Lime;
+    font-size: 10pt;
+    font-weight: bold;
+    font-family: serif;
+    border-radius: 18px;
+    padding: 12px;
+    min-width: 230px;
+}

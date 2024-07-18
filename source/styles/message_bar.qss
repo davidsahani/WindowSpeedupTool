@@ -1,0 +1,41 @@
+QWidget {
+    background-color: #4e5863;
+    border-radius: 5px;
+}
+
+QLabel {
+    color: Snow;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+QPushButton {
+    color: #00E7FF;
+    font-size: 10pt;
+    font-weight: bold;
+    min-width: 60px;
+}
+QPushButton:hover {
+    color: #ffffff;
+    background-color: Teal;
+}
+
+#CloseButton {
+    font-size: 18pt;
+    min-width: 40px;
+}
+#CloseButton:hover {
+    background-color: #fa100a;
+}
+
+#RetryButton {
+    background-color: LimeGreen;
+    color: #fff;
+    font-size: 10pt;
+    font-weight: bold;
+    min-width: 40px;
+    padding: 10px;
+}
+#RetryButton:hover {
+    background-color: Lime;
+}

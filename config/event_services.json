@@ -1,0 +1,22 @@
+{
+    "COMSysApp": [
+        "manual",
+        "COM+ System Application"
+    ],
+    "EventSystem": [
+        "automatic",
+        "COM+ Event System"
+    ],
+    "SENS": [
+        "automatic",
+        "System Event Notification Service"
+    ],
+    "Wecsvc": [
+        "manual",
+        "Windows Event Collector"
+    ],
+    "EventLog": [
+        "automatic",
+        "Windows Event Log"
+    ]
+}

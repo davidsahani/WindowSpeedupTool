@@ -1,38 +1,22 @@
 {
     "Schedule": [
-        "2",
+        "automatic",
         "Task Scheduler"
     ],
     "gpsvc": [
-        "2",
-        "Group policy client"
+        "automatic",
+        "Group Policy Client"
     ],
-    "SystemEventsBroker": [
-        "2",
-        "System Events Broker"
-    ],
-    "DoSvc": [
-        "3",
-        "Delivery Optimization"
-    ],
-    "AppXSvc": [
-        "3",
-        "AppX Deployment Service (AppXSVC)"
-    ],
-    "ClipSVC": [
-        "3",
-        "Client License Service (ClipSVC)"
+    "VaultSvc": [
+        "manual",
+        "Credential Manager"
     ],
     "NgcSvc": [
-        "3",
+        "manual",
         "Microsoft Passport"
     ],
     "NgcCtnrSvc": [
-        "3",
+        "manual",
         "Microsoft Passport Container"
-    ],
-    "WinHttpAutoProxySvc": [
-        "3",
-        "WinHTTP Web Proxy Auto-Discovery Service"
     ]
 }

@@ -1,0 +1,20 @@
+[project]
+name = "WindowSpeedupTool"
+version = "0.2.0"
+requires-python = ">=3.12"
+
+[tool.isort]
+profile = "appnexus"
+src_paths = ["source", "test"]
+
+[tool.pyright]
+exclude = ["**/build", "**/__pycache__"]
+
+typeCheckingMode = "strict"
+
+reportImportCycles = true
+reportShadowedImports = true
+
+reportUnusedImport = "information"
+reportImplicitOverride = "information"
+reportImplicitStringConcatenation = "information"
