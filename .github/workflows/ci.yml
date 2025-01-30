@@ -1,0 +1,212 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  lint:
+    runs-on: windows-2022
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Get pip cache dir
+      run: |
+        echo "pip_cache_dir=$(pip cache dir)" | `
+        Out-File -Append -FilePath $env:GITHUB_ENV
+
+    - name: Cache python pip
+      id: cache-pip
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.pip_cache_dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip--${{ hashFiles('requirements.txt') }}
+
+    - name: Get npm cache directory
+      id: npmCacheDirPath
+      if: ${{ steps.cacheNodeModules.outputs.cache-hit != 'true' }}
+      run: |
+        echo "dir=$(npm config get cache)" | `
+        Out-File -Append -FilePath $env:GITHUB_OUTPUT
+
+    - name: Cache npm directory
+      if: ${{ steps.cacheNodeModules.outputs.cache-hit != 'true' }}
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.npmCacheDirPath.outputs.dir }}
+        key: ${{ runner.os }}-npmCacheDir-${{ steps.nodeModulesCacheKey.outputs.value }}
+        restore-keys: ${{ runner.os }}-npmCacheDir-
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install flake8
+        pip install toml
+        npm install -g pyright
+
+    - name: Patch QtCore.pyi
+      run: python _patch_qtcore.pyi.py
+
+    - name: Lint with pyright
+      run: pyright
+
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --statistics
+
+  check_version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      current_version: ${{ steps.current_version.outputs.CURRENT_VERSION }}
+      version_changed: ${{ steps.check_version.outputs.VERSION_CHANGED }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Extract current version from setup.iss
+      id: current_version
+      run: |
+        version=$(grep -Po '(?<=#define AppVersion ")[^"]+' setup.iss)
+        echo "Current version: $version"
+        echo "CURRENT_VERSION=$version" >> $GITHUB_ENV
+        echo "CURRENT_VERSION=$version" >> $GITHUB_OUTPUT
+
+    - name: Get previous version
+      id: previous_version
+      run: |
+        git fetch --unshallow --tags
+        latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || git tag -l | sort -V | tail -n 1)
+        previous_version=${latest_tag#v}
+        echo "Previous version: $previous_version"
+        echo "PREVIOUS_VERSION=$previous_version" >> $GITHUB_ENV
+
+    - name: Check version change
+      id: check_version
+      run: |
+        if [ "$CURRENT_VERSION" = "$PREVIOUS_VERSION" ]; then
+          echo "Version has not changed."
+          echo "VERSION_CHANGED=false" >> $GITHUB_OUTPUT
+        else
+          echo "Version has changed."
+          echo "VERSION_CHANGED=true" >> $GITHUB_OUTPUT
+        fi
+
+  build:
+    runs-on: windows-2022
+    needs: [lint, check_version]
+    if: ${{ needs.check_version.outputs.version_changed == 'true' }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Get pip cache dir
+      run: |
+        echo "pip_cache_dir=$(pip cache dir)" | `
+        Out-File -Append -FilePath $env:GITHUB_ENV
+
+    - name: Cache python pip
+      id: cache-pip
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.pip_cache_dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: Build project
+      run: python build.py
+
+    - name: Remove unnecessary includes
+      run: |
+        del ./build/WindowSpeedupTool/runtime/api-ms-win*.dll
+        del ./build/WindowSpeedupTool/runtime/ucrtbase.dll
+
+    - name: Create application zip archive
+      # run: Compress-Archive -Path build/WindowSpeedupTool/* -Destination build/WindowSpeedupTool.zip
+      run: 7z.exe a -tzip -mx=9 ./build/WindowSpeedupTool.zip ./build/WindowSpeedupTool
+
+    - name: Create setup installer
+      run: |
+        & "C:\Program Files (x86)\Inno Setup 6\iscc.exe" setup.iss
+
+    - name: Set current version env variable
+      id: version
+      run: |
+        $current_version = "${{ needs.check_version.outputs.current_version }}"
+        echo "Current version: $current_version"
+        echo "CURRENT_VERSION=$current_version" | Out-File -Append -FilePath $env:GITHUB_ENV
+
+    - name: Set prerelease flag
+      id: set_prerelease
+      run: |
+        if ($env:CURRENT_VERSION.StartsWith('0')) {
+          echo "prerelease=true" | Out-File -Append -FilePath $env:GITHUB_ENV
+        } else {
+          echo "prerelease=false" | Out-File -Append -FilePath $env:GITHUB_ENV
+        }
+
+    - name: Create GitHub release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.CURRENT_VERSION }}
+        release_name: v${{ env.CURRENT_VERSION }}
+        draft: false
+        prerelease: ${{ env.prerelease }}
+
+    - name: Upload release ZIP archive
+      id: upload-release-zip 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/WindowSpeedupTool.zip
+        asset_name: WindowSpeedupTool.zip
+        asset_content_type: application/zip
+
+    - name: Upload release executable file
+      id: upload-release-executable
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/WindowSpeedupToolSetup.exe
+        asset_name: WindowSpeedupToolSetup.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
