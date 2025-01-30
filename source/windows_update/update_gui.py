@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from window_services.services_thread import ServicesType
+from windows_services.services_thread import ServicesType
 
 
 class UpdateGui(QFrame):

@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import sys
 from typing import Any
 
 import toml
@@ -55,10 +56,10 @@ def build(name: str, src_dir: str, out_dir: str) -> int:
         os.path.join(src_dir, "main.py")
     ]
 
-    return subprocess.call(pyinstaller_cmd)
+    return subprocess.call(pyinstaller_cmd + sys.argv[1:])
 
 
-def main() -> None:
+def main() -> int:
     script_dir = os.path.dirname(__file__)  # project directory.
     project_config = read_config(os.path.join(script_dir, "pyproject.toml"))
 
@@ -74,7 +75,7 @@ def main() -> None:
     status = build(project_name, source_dir, output_dir)
 
     if status != 0:
-        return  # abort build failed.
+        return status  # abort build failed.
 
     output_dir = os.path.join(output_dir, project_name)
 
@@ -86,7 +87,8 @@ def main() -> None:
 
     # copy directories to project output build directory.
     copy_dirs(script_dir, output_dir, config.load().config_dir, "bin")
+    return status  # success
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

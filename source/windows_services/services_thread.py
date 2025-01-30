@@ -113,7 +113,7 @@ class ServicesThread(QThread):
             if status_result.value[1] == 4:
                 continue  # already running
 
-            if service.start(svc.service_name).value:
+            if service.start(svc.service_name).success:
                 continue  # on success
 
             result = service.net_start(svc.service_name)
@@ -138,7 +138,7 @@ class ServicesThread(QThread):
             if status_result.value[1] != 4:
                 continue  # already stopped
 
-            if service.stop(svc.service_name).value:
+            if service.stop(svc.service_name).success:
                 continue  # on success
 
             result = service.net_stop(svc.service_name)
@@ -176,14 +176,12 @@ class ServicesThread(QThread):
 
             # Access is denied or RPC service is unavailable or dependency not started.
             if result.status in (5, 1722, 3221356598):
-                res = service.set_startup_value(
+                result = service.set_startup_value(
                     svc.service_name, svc.startup_type
                 )
-                if res.value is None:
-                    self.__failed_services.append((svc, res.error.stderr))
-                else:
+                if result.status == 0:
                     self.__restart_required = True
-                continue
+                    continue
 
             self.__failed_services.append((svc, result.error))
 
@@ -219,11 +217,11 @@ class ServicesThread(QThread):
 
             # Access is denied or RPC service is unavailable.
             if result.status in (5, 1722):
-                res = service.set_startup_value(svc.service_name, 'disabled')
-                if res.value is None:
-                    self.__failed_services.append((svc, res.error.stderr))
-                else:
+                result = service.set_startup_value(
+                    svc.service_name, 'disabled'
+                )
+                if result.status == 0:
                     self.__restart_required = True
-                continue
+                    continue
 
             self.__failed_services.append((svc, result.error))

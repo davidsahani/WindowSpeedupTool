@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import QFrame, QGridLayout, QWidget
 from utils import config, power, service, styles
 from utils.config_parser import Error, Service
 from widgets.message_bar import MessageBar
-from window_services.services_thread import (
+from windows_services.services_thread import (
     Action,
     FailedServicesType,
     ServicesThread,

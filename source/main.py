@@ -1,6 +1,5 @@
 import functools
 import os
-import subprocess
 import sys
 
 from PyQt6.QtCore import Qt
@@ -17,7 +16,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from advanceoptions import AdvanceOptions
+from advance_options import AdvanceOptions
 from drivers_backup import DriversBackup
 from power_options import PowerOptions
 from system_cleaner import SystemCleaner
@@ -25,7 +24,7 @@ from system_info import SystemInfo
 from system_repair import SystemRepair
 from utils import config, styles, threads
 from widgets.stacked_widget import StackedWidget
-from window_services import WindowServices
+from windows_services import WindowsServices
 from windows_update import WindowsUpdate
 
 WIDGETS = [
@@ -35,7 +34,7 @@ WIDGETS = [
     ("Drivers Backup", DriversBackup),
     ("System Cleaner", SystemCleaner),
     ("Windows Update", WindowsUpdate),
-    ("Windows Services", WindowServices),
+    ("Windows Services", WindowsServices),
     ("Advance Options", AdvanceOptions)
 ]
 
@@ -51,8 +50,9 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("icons\\thunder-bolt.png"))
 
         name, cls = next(
-            ((name, cls) for name, cls in WIDGETS if cls.__name__
-             == cls_name), (None, None)) if cls_name else (None, None)
+            filter(lambda w: w[1].__name__ == cls_name, WIDGETS),
+            (None, None)  # if no match found.
+        )
 
         if cls is not None:
             result = threads.Result.from_command(["whoami"])
@@ -103,10 +103,10 @@ class MainWindow(QMainWindow):
         # instantiate variable to ignore unbound variable linter warning.
         button: QPushButton = None  # type: ignore - button will be reassigned
 
-        for name, _class in WIDGETS:
+        for name, cls in WIDGETS:
             button = QPushButton(name)
             button.clicked.connect(
-                functools.partial(self.handleButtonClick, _class, button)
+                functools.partial(self.handleButtonClick, cls, button)
             )
             button.setCheckable(True)
             layout.addWidget(button)
@@ -119,20 +119,20 @@ class MainWindow(QMainWindow):
         frame.setLayout(layout)
         return frame
 
-    def handleButtonClick(self, _class: type, button: QPushButton):
-        self.setCurrentWidget(_class)
-        self.setCurrentButtonSelected(button)
+    def handleButtonClick(self, cls: type, button: QPushButton):
+        if self.setCurrentWidget(cls):
+            self.setCurrentButtonSelected(button)
 
-    def setCurrentWidget(self, cls: type) -> None:
+    def setCurrentWidget(self, cls: type) -> bool:
         """Set current widget by given class."""
         widget = self.stacked_widget.widgetName(cls.__name__)
         if widget is None:
             if cls.__name__ == AdvanceOptions.__name__:
                 if self.launchAdvanceOptions():
-                    return
+                    return False
             widget = cls(self.stacked_widget)
             self.stacked_widget.addWidget(widget)
-        self.stacked_widget.setCurrentWidget(widget)
+        return self.stacked_widget.setCurrentWidget(widget) or True
 
     def setCurrentButtonSelected(self, button: QPushButton) -> None:
         """Set current button selected and previous button unselected."""
@@ -156,12 +156,12 @@ class MainWindow(QMainWindow):
 
         main_exe = os.path.join(config.PROJECT_DIR, "WindowSpeedupTool.exe")
 
-        if os.path.exists(main_exe):
-            subprocess.call(
-                [nsudo, "-U:T", "-P:E", main_exe, AdvanceOptions.__name__]
-            )
-            return True
-        return False
+        if not os.path.exists(main_exe):
+            return False
+
+        return threads.Result.from_command(
+            [nsudo, "-U:T", "-P:E", main_exe, AdvanceOptions.__name__]
+        ).status().success
 
 
 if __name__ == '__main__':

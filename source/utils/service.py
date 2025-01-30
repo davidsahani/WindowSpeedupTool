@@ -8,32 +8,24 @@ import win32serviceutil
 from .threads import Error, Result, StatusResult
 
 
-def start(service_name: str) -> Result[bool]:
-    """Start the windows service.
-
-    Return:
-        Result(True) on success.
-    """
+def start(service_name: str) -> StatusResult:
+    """Start the windows service."""
     try:
         win32serviceutil.StartService(service_name)  # type: ignore
     except win32service.error as e:
-        return Result(error=Error(e.winerror, e.strerror))
+        return StatusResult(e.winerror, e.strerror)
     else:
-        return Result(True)
+        return StatusResult(0)
 
 
-def stop(service_name: str) -> Result[bool]:
-    """Stop the windows service.
-
-    Return:
-        Result(True) on success.
-    """
+def stop(service_name: str) -> StatusResult:
+    """Stop the windows service."""
     try:
         win32serviceutil.StopService(service_name)  # type: ignore
     except win32service.error as e:
-        return Result(error=Error(e.winerror, e.strerror))
+        return StatusResult(e.winerror, e.strerror)
     else:
-        return Result(True)
+        return StatusResult(0)
 
 
 def net_start(service_name: str) -> StatusResult:
@@ -85,7 +77,7 @@ def info(service_name: str) -> Result[dict[str, str]]:
     except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
         return Result(error=Error(e.pid, e.msg))
     except OSError as e:
-        return Result(error=Error(e.winerror, e.strerror))
+        return Result(error=Error(e.winerror, e.strerror or ''))
     else:
         return Result(result)  # type: ignore
 
@@ -196,7 +188,7 @@ def startup_value(service_name: str) -> Result[int]:
             winreg.CloseKey(reg_key)
 
 
-def set_startup_value(service_name: str, startup_type: str) -> Result[bool]:
+def set_startup_value(service_name: str, startup_type: str) -> StatusResult:
     """Set startup value of the service in windows registry.
 
     Parameters:
@@ -204,9 +196,6 @@ def set_startup_value(service_name: str, startup_type: str) -> Result[bool]:
         - startup_type: The startup type of the service.
 
         This must be `automatic`, `automatic-delayed`, `manual` or `disabled`.
-
-    Return:
-        Result(True) on success.
 
     Raise:
         ValueError: If the startup_type is invalid.
@@ -232,20 +221,20 @@ def set_startup_value(service_name: str, startup_type: str) -> Result[bool]:
             key, f"{sub_key}\\{service_name}", 0, winreg.KEY_SET_VALUE)
 
     except FileNotFoundError as e:
-        return Result(error=Error(e.winerror, f"{reg_path} doesn't exist."))
+        return StatusResult(e.winerror, f"{reg_path} doesn't exist.")
 
     except OSError as e:
-        return Result(error=Error(e.winerror, f"{e}\nCouldn't open key: {reg_path}"))
+        return StatusResult(e.winerror, f"{e}\nCouldn't open key: {reg_path}")
 
     else:
         try:
             winreg.SetValueEx(reg_key, "Start", 0, winreg.REG_DWORD, start_value)  # noqa
 
         except OSError as e:
-            return Result(error=Error(e.winerror, f"{e}\nCouldn't write key: {reg_path}"))
+            return StatusResult(e.winerror, f"{e}\nCouldn't write key: {reg_path}")
 
         else:
-            return Result(True)
+            return StatusResult(0)
 
         finally:
             winreg.CloseKey(reg_key)

@@ -7,7 +7,7 @@ import qdarkstyle  # type: ignore
 from source.utils import service
 from source.utils.config_parser import Service
 from source.widgets.stacked_widget import StackedWidget
-from source.window_services.confirm_widget import ConfirmActionWidget
+from source.windows_services.confirm_widget import ConfirmActionWidget
 
 
 def main() -> None:

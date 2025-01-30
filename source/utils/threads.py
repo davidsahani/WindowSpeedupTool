@@ -19,9 +19,13 @@ class Error(Exception):
 
 
 class StatusResult:
-    def __init__(self, status: int, error: str) -> None:
+    def __init__(self, status: int, error: str = "") -> None:
         self.status = status
         self.error = error
+
+    @property
+    def success(self) -> bool:
+        return self.status == 0
 
     @override
     def __repr__(self) -> str:

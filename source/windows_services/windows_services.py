@@ -34,7 +34,7 @@ from .services_thread import (  # noqa
 from .services_widget import ServicesWidget, ServiceWidget
 
 
-class WindowServices(QFrame):
+class WindowsServices(QFrame):
     def __init__(self, parent: StackedWidget) -> None:
         super().__init__(parent)
         self._parent = parent
@@ -123,7 +123,7 @@ class WindowServices(QFrame):
     def createMainWidget(self) -> QWidget:
         """Load configuration and create the main services widget."""
         self.config = config.load()
-        return self.createServicesWidget(self.config.Services)
+        return self.createServicesWidget(self.config.windows_services)
 
     def createServicesWidget(self, services_config: ServicesConfigType) -> QWidget:
         """Create and return a widget containing all services based on the configuration."""
@@ -277,7 +277,7 @@ class WindowServices(QFrame):
 
     def revert(self) -> None:
         """Disable backed-up services."""
-        services = self.getBackedUpServices(self.config.Services)
+        services = self.getBackedUpServices(self.config.windows_services)
         if services is None:
             return
         if services:
@@ -289,7 +289,7 @@ class WindowServices(QFrame):
 
     def restore(self) -> None:
         """Enable backed-up services."""
-        services = self.getBackedUpServices(self.config.Services)
+        services = self.getBackedUpServices(self.config.windows_services)
         if services is None:
             return
         if services:

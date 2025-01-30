@@ -1,6 +1,7 @@
 from collections import defaultdict
 from configparser import ConfigParser, Error
-from dataclasses import dataclass
+from contextlib import suppress
+from dataclasses import dataclass, fields
 from enum import Enum
 from typing import KeysView, override, Self, TypeAlias
 
@@ -60,8 +61,8 @@ class Config:
     config_dir: str
     backup_dir: str
     update_filename: str
-    Services: ServicesConfigType
-    AdvancedServices: ServicesConfigType
+    windows_services: ServicesConfigType
+    advance_services: ServicesConfigType
     _default_keys: KeysView[str] | None = None
 
     @classmethod
@@ -85,28 +86,40 @@ class Config:
                 section_prefix = section.split(".", maxsplit=1)[0]
                 services_sections[section_prefix].append(section)
 
-        services_list: ServicesConfigType = []
-        advanced_list: ServicesConfigType = []
-
-        cls._process_sections(config, services_sections, services_list)
-        cls._process_sections(config, advanced_sections, advanced_list)
+        services_list = cls._process_sections(config, services_sections)
+        advanced_list = cls._process_sections(config, advanced_sections)
 
         return cls(
             config_dir=config_dir,
             backup_dir=backup_dir,
             update_filename=filename,
-            Services=services_list,
-            AdvancedServices=advanced_list
+            windows_services=services_list,
+            advance_services=advanced_list
         )
 
     @classmethod
-    def _process_sections(cls, config: ConfigParser, sections_dict: defaultdict[str, list[str]], config_list: ServicesConfigType) -> None:
+    def _process_sections(cls, config: ConfigParser, sections_dict: defaultdict[str, list[str]]) -> ServicesConfigType:
+        service_field_names = [field.name for field in fields(ServiceConfig)]
+        services_field_names = [field.name for field in fields(ServicesConfig)]
+        with suppress(ValueError):  # remove not required field names
+            service_field_names.remove("buttons")
+            services_field_names.remove("extra_buttons")
+
         def process_section(section: str) -> ServiceConfig | ServicesConfig | None:
             if section.endswith("Service"):
-                service = dict(config[section])
-                cls._validate_service_section(section, service)
+                kwargs: dict[str, str] = {}
+                field_items = dict(config[section])
 
-                buttons = service.get("buttons")
+                for field_name in service_field_names:
+                    value = field_items.get(field_name)
+                    if value is None:
+                        raise cls._configError(
+                            section, field_items,
+                            f"{field_name!r} is not specified in the configuration."
+                        )
+                    kwargs[field_name] = value
+
+                buttons = field_items.get("buttons")
                 button_enums: list[Button] = []
 
                 for button in buttons.split(",") if buttons else []:
@@ -123,22 +136,26 @@ class Config:
                             button_enums.append(Button.DISABLE)
                         case _:
                             raise cls._configError(
-                                section, service,
+                                section, field_items,
                                 f"Invalid button: {button!r}, specified in configuration."  # noqa
                             )
 
-                return ServiceConfig(
-                    service_name=service["service_name"],
-                    display_name=service["display_name"],
-                    startup_type=service["startup_type"],
-                    buttons=button_enums,
-                )
+                return ServiceConfig(**kwargs, buttons=button_enums)
 
             elif section.endswith("Services"):
-                services = dict(config[section])
-                cls._validate_services_section(section, services)
+                kwargs: dict[str, str] = {}
+                field_items = dict(config[section])
 
-                extra_buttons = services.get("extra-buttons")
+                for field_name in services_field_names:
+                    value = field_items.get(field_name)
+                    if value is None:
+                        raise cls._configError(
+                            section, field_items,
+                            f"{field_name!r} is not specified in the configuration."
+                        )
+                    kwargs[field_name] = value
+
+                extra_buttons = field_items.get("extra-buttons")
                 buttons_enums: list[ExtraButton] = []
 
                 for extra_button in extra_buttons.split(",") if extra_buttons else []:
@@ -151,49 +168,30 @@ class Config:
                             buttons_enums.append(ExtraButton.DISABLE_RUNNING)
                         case _:
                             raise cls._configError(
-                                section, services,
+                                section, field_items,
                                 f"Invalid extra button: {extra_button!r}, specified in configuration."  # noqa
                             )
 
-                return ServicesConfig(
-                    title=services["title"],
-                    filename=services["filename"],
-                    extra_buttons=buttons_enums
-                )
+                return ServicesConfig(**kwargs, extra_buttons=buttons_enums)
+
+        configs_list: ServicesConfigType = []
 
         for sections in sections_dict.values():
-            if len(sections) == 1:
-                svc_config = process_section(sections[0])
+            svc_configs: list[ServiceConfig | ServicesConfig] = []
+
+            for section in sections:
+                svc_config = process_section(section)
                 if svc_config is not None:
-                    config_list.append(svc_config)
+                    svc_configs.append(svc_config)
 
-                continue  # after processing section.
-
-            svc_configs = [svc_config for section in sections if (
-                svc_config := process_section(section))]
-
-            if svc_configs:
-                config_list.append(svc_configs)
-
-    @classmethod
-    def _validate_service_section(cls, section: str, section_dict: dict[str, str]) -> None:
-        for key in ("service_name", "display_name", "startup_type"):
-            if key in section_dict:
+            if not svc_configs:
                 continue
-            raise cls._configError(
-                section, section_dict,
-                f"{key!r} is not specified in the configuration."
-            )
+            if len(svc_configs) == 1:
+                configs_list.append(svc_configs[0])
+            else:
+                configs_list.append(svc_configs)
 
-    @classmethod
-    def _validate_services_section(cls, section: str, section_dict: dict[str, str]) -> None:
-        for key in ("title", "filename"):
-            if key in section_dict:
-                continue
-            raise cls._configError(
-                section, section_dict,
-                f"{key!r} is not specified in the configuration."
-            )
+        return configs_list
 
     @classmethod
     def _configError(cls, section: str, section_dict: dict[str, str], message: str) -> ConfigurationError:

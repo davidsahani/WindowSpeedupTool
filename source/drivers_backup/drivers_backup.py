@@ -39,10 +39,10 @@ class DriversBackup(QFrame):
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
-        self._backup_dir = get_backup_dir()
         self.setupThreads()
         self.setupWidgets()
         self.setStyleSheet(styles.get("drivers"))
+        self._backup_dir = get_backup_dir()
         self.__mutex = QMutex()
         self.__cancel_flag = False
         self.load_drivers_thread.start()
@@ -225,7 +225,7 @@ class DriversBackup(QFrame):
     def onUninstallFinish(self, result: Result[str], row: int) -> None:
         """Remove the selected row and show status message"""
         published_name = self.drivers_view.publishedName(row)
-        if result.value is not None:
+        if result.value is None:
             self.border_widget.showMainWidget()
 
             QMessageBox.warning(

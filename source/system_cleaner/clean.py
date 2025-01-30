@@ -35,14 +35,6 @@ def clean_dir(directory: str) -> Generator[str, None, None]:
     "Delete all the files in the specified directory."
 
     try:
-        shutil.rmtree(directory)
-    except OSError as error:
-        yield f"{error.__class__.__name__}: {error}"
-    else:
-        yield f"Removed dir: {directory}"
-        return
-
-    try:
         filenames = os.listdir(directory)
     except OSError as error:
         yield f"{error.__class__.__name__}: {error}"

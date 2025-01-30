@@ -5,12 +5,12 @@ from PyQt6.QtWidgets import QCommandLinkButton, QVBoxLayout, QWidget
 
 from utils import config
 from widgets.stacked_widget import StackedWidget
-from window_services.windows_services import Action, WindowServices
+from windows_services.windows_services import Action, WindowsServices
 
 from .packages_uninstall import PackagesUninstall
 
 
-class AdvanceOptions(WindowServices):
+class AdvanceOptions(WindowsServices):
     def __init__(self, parent: StackedWidget) -> None:
         super().__init__(parent)
         self.packages_uninstall = None
@@ -34,11 +34,11 @@ class AdvanceOptions(WindowServices):
     @override
     def createMainWidget(self) -> QWidget:
         self.config = config.load()
-        return self.createServicesWidget(self.config.AdvancedServices)
+        return self.createServicesWidget(self.config.advance_services)
 
     @override
     def revert(self) -> None:
-        services = self.getBackedUpServices(self.config.AdvancedServices)
+        services = self.getBackedUpServices(self.config.advance_services)
         if services is None:
             return
         if services:
@@ -50,7 +50,7 @@ class AdvanceOptions(WindowServices):
 
     @override
     def restore(self) -> None:
-        services = self.getBackedUpServices(self.config.AdvancedServices)
+        services = self.getBackedUpServices(self.config.advance_services)
         if services is None:
             return
         if services:
