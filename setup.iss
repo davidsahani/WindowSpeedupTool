@@ -1,5 +1,5 @@
 #define AppName "WindowSpeedupTool"
-#define AppVersion "0.2.0"
+#define AppVersion "0.3"
 #define AppPublisher "davidsahani@github.com"
 #define AppURL "https://github.com/davidsahani/WindowSpeedupTool"
 #define AppExeName AppName + ".exe"
